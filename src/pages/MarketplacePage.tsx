@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import Sidebar from "../components/dashboard-components/Sidebar";
+import MarketplaceSidebar from "../components/dashboard-components/MarketplaceSidebar";
 import Logo from "../assets/Logo-black.svg";
 
 import { Menu, Bell } from "lucide-react";
 
-const BuyerDashboard = () => {
+const Marketplace = () => {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex">
       {/* SIDEBAR */}
-      <Sidebar open={open} onClose={() => setOpen(false)} />
+      <MarketplaceSidebar open={open} onClose={() => setOpen(false)} />
 
       {/* MAIN CONTENT */}
       <div className="flex-1 flex-col  ">
@@ -39,12 +38,10 @@ const BuyerDashboard = () => {
         </div>
 
         {/* OUTLET FOR NESTED ROUTES */}
-        <div className=" max-w-7xl mx-auto w-full ">
-          <Outlet />
-        </div>
+        <div className=" md:py-4 max-w-7xl mx-auto w-full "></div>
       </div>
     </div>
   );
 };
 
-export default BuyerDashboard;
+export default Marketplace;

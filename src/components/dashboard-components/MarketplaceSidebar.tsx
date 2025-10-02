@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Logo from "../../assets/Logo-black.svg";
 import { X } from "lucide-react";
@@ -12,6 +13,9 @@ import {
   Settings,
   User,
   LogOut,
+  CircleArrowLeft,
+  Search,
+  Star,
 } from "lucide-react";
 
 type Props = {
@@ -19,27 +23,50 @@ type Props = {
   onClose: () => void;
 };
 
+type Category =
+  | "All"
+  | "Vegetables"
+  | "Fruits"
+  | "Grains"
+  | "Dairy"
+  | "Protein"
+  | "Herbs & Spices";
+
 const sectionTitle = ` font-bold text-sm text-gray-500 uppercase px-3 mt-4 mb-2`;
 
-const Sidebar = ({ open, onClose }: Props) => {
+const MarketPlaceSidebar = ({ open, onClose }: Props) => {
   const linkclass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center font-bold text-sm gap-3 px-3 py-2 rounded-md transition-colors duration-200 ${
       isActive ? "text-pri " : "text-black hover:text-pri "
     }`;
 
+  const [price, setPrice] = useState(5000);
+  const [organic, setOrganic] = useState(false);
+  const [nonOrganic, setNonOrganic] = useState(false);
+
+  const categories: Category[] = [
+    "All",
+    "Vegetables",
+    "Fruits",
+    "Grains",
+    "Dairy",
+    "Protein",
+    "Herbs & Spices",
+  ];
+
   return (
     <>
       {/* BIG SCREEN SIDEBAR */}
-      <aside className="font-dm-sans hidden min-h-screen overflow-y-auto md:flex md:flex-col md:w-63  ">
-        <div className="ml-6 mt-3 mb-6 ">
-          <NavLink to="/" className="text-2xl   cursor-pointer">
-            <img src={Logo} alt="logo" className="w-[100px] md:w-[150px]" />
+      <aside className="font-dm-sans hidden min-h-screen overflow-y-auto md:flex md:flex-col  md:w-80   ">
+        <div className=" mt-4 mb-6 ">
+          <NavLink to="/buyerdashboard" className="text-2xl   cursor-pointer">
+            <CircleArrowLeft className="w-7 h-7  ml-6 mb-4 text-pri" />
           </NavLink>
         </div>
 
         {/* MAIN TAB */}
-        <div className="pl-4 w-full bg-[#f5f5f5]">
-          <div className={sectionTitle}>Main</div>
+        <div className=" w-[80%] py-5 pl-5 pr-10  mx-auto border border-[#eefcf3]">
+          <div className={`${sectionTitle} border-b-2 border-black`}>Main</div>
           <nav className="flex flex-col gap-2 ml-3">
             <NavLink to="/buyerdashboard/overview" end className={linkclass}>
               <LayoutGrid className="w-5 h-5" /> Dashboard
@@ -199,4 +226,4 @@ const Sidebar = ({ open, onClose }: Props) => {
   );
 };
 
-export default Sidebar;
+export default MarketPlaceSidebar;
