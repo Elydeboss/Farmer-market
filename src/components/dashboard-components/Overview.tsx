@@ -1,5 +1,4 @@
 import {
-  User,
   Bell,
   TrendingUp,
   PiggyBank,
@@ -12,13 +11,14 @@ import {
 } from "lucide-react";
 import StatsCard from "./StatsCard";
 import OrderTable from "./OrderTable";
+import Image from "../../assets/marketplace-images/Ellipse 1.svg";
 
 const Overview = () => {
   return (
     <>
       <div className="hidden md:flex items-center justify-between px-6  w-full md:w-[95%] py-7 pb-3 border-b-2 border-[#e6e6e6]">
         <div className="">
-          <h2 className="text-black font-bold text-3xl">Dashboard</h2>
+          <h2 className="text-black font-bold text-2xl">Dashboard</h2>
           <div className="text-[#999] text-[16px] font-medium mt-4">
             <span className=" mr-2">Welcome</span>
             <span className="font-semibold">Caleb</span>
@@ -36,7 +36,7 @@ const Overview = () => {
           </div>
           <div className="">
             <button>
-              <User className="w-11 h-11 p-2 bg-gray-200 rounded-full" />
+              <img src={Image} alt="" className="w-10" />
             </button>
           </div>
         </div>
@@ -107,7 +107,7 @@ const Overview = () => {
       <div className="px-6 mt-20 w-full md:w-[95%]">
         <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-black font-bold text-3xl">Orders</h2>
+            <h2 className="text-black font-bold text-2xl">Orders</h2>
             <p className="text-[#737373] text-[16px] font-medium mt-4">
               View and track your orders from customers
             </p>

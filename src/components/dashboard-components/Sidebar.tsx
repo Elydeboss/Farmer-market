@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import Logo from "../../assets/Logo-black.svg";
 import { X } from "lucide-react";
+import Image from "../../assets/marketplace-images/Ellipse 1.svg";
 import {
   LayoutGrid,
   TrendingUp,
@@ -10,7 +11,6 @@ import {
   CircleHelp,
   Headphones,
   Settings,
-  User,
   LogOut,
 } from "lucide-react";
 
@@ -23,22 +23,22 @@ const sectionTitle = ` font-bold text-sm text-gray-500 uppercase px-3 mt-4 mb-2`
 
 const Sidebar = ({ open, onClose }: Props) => {
   const linkclass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center font-bold text-sm gap-3 px-3 py-2 rounded-md transition-colors duration-200 ${
+    `flex items-center font-bold text-sm gap-3 px-3 mb-2 rounded-md transition-colors duration-200 ${
       isActive ? "text-pri " : "text-black hover:text-pri "
     }`;
 
   return (
     <>
       {/* BIG SCREEN SIDEBAR */}
-      <aside className="font-dm-sans hidden min-h-screen overflow-y-auto md:flex md:flex-col md:w-63  ">
-        <div className="ml-6 mt-3 mb-6 ">
+      <aside className="font-dm-sans hidden sticky top-0 left-0 h-screen justify-between   md:flex md:flex-col md:w-64  ">
+        <div className="ml-6 mt-3 mb-4 ">
           <NavLink to="/" className="text-2xl   cursor-pointer">
             <img src={Logo} alt="logo" className="w-[100px] md:w-[150px]" />
           </NavLink>
         </div>
 
         {/* MAIN TAB */}
-        <div className="pl-4 w-full bg-[#f5f5f5]">
+        <div className="pl-4 w-full text-sm  pb-5 bg-[#f5f5f5]">
           <div className={sectionTitle}>Main</div>
           <nav className="flex flex-col gap-2 ml-3">
             <NavLink to="/buyerdashboard/overview" end className={linkclass}>
@@ -84,9 +84,9 @@ const Sidebar = ({ open, onClose }: Props) => {
           </nav>
 
           {/* USER */}
-          <div className="mt-auto pl-3  py-15 ">
+          <div className="mt-10 pl-3 ">
             <div className="flex items-center gap-3">
-              <User className="w-11 h-11 p-2 bg-gray-200 rounded-full" />
+              <img src={Image} alt="" className="w-10" />
               <div className="flex flex-col gap-0.5">
                 <div className="font-semibold text-sm">John Caleb Ekong</div>
                 <div className="text-sm font-medium text-[#999999]">Buyer</div>
@@ -176,7 +176,7 @@ const Sidebar = ({ open, onClose }: Props) => {
               {/* USER */}
               <div className="mt-auto pl-3  py-15 ">
                 <div className="flex items-center gap-3">
-                  <User className="w-11 h-11 p-2 bg-gray-200 rounded-full" />
+                  <img src={Image} alt="" className="w-10" />
                   <div className="flex flex-col gap-0.5">
                     <div className="font-semibold text-sm">
                       John Caleb Ekong
