@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import NavLogo from "../assets/Home-Images/Logo 2.svg";
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   return (
@@ -44,9 +45,10 @@ const Navbar: React.FC = () => {
         </ul>
 
         <div>
-          <button className="border-0 outline-0 cursor-pointer bg-sec text-black text-sm font-bold py-3 px-5 rounded-md hover:bg-sec2">
+         <Link to="/createaccount"> <button className="border-0 outline-0 cursor-pointer bg-sec text-black text-sm font-bold py-3 px-5 rounded-md hover:bg-sec2">
             Sign Up / Log In
           </button>
+          </Link>
         </div>
       </div>
     </nav>
