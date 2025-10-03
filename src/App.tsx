@@ -1,8 +1,8 @@
 // App.jsx
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home"; // you already have this
-import Signup from "./pages/Signup";
+import Signup from "./pages/BuyerReg";
 import Dashboard from "../src/pages/Farmerdashboard";
 import CreateAccountPage from "./pages/CreateAccountPage";
 
@@ -14,8 +14,12 @@ import MarketplacePage from "./pages/MarketplacePage";
 
 import FarmBusinessDetails from "./pages/FarmBusinessDetails";
 import VerificationDetails from "./pages/VerificationDetails";
-import BankingPayment from "./pages/BankingPayment";
+import BankingPayment from "./pages/Signup";
 import SignPage from "./pages/SigninPage";
+import BuyerReg from "./pages/BuyerReg";
+import SuccessPage from "./pages/SuccessPage";
+
+import VerificationCode from "./pages/VerificationCode";
 
 // Example extra pages (create About.jsx, NotFound.jsx later)
 //function About() {
@@ -39,20 +43,20 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/createaccount" element={<CreateAccountPage />} />
-<<<<<<< HEAD
-        <Route path="/marketplace" element={<MarketplacePage />} />
-=======
-
->>>>>>> 00abc5647942df7ba272aa8a292398a3727ce41c
         <Route path="/buyerdashboard" element={<BuyerDashboard />}>
           <Route index element={<Overview />} />
           <Route path="overview" element={<Overview />} />
         </Route>
 
+        <Route path="/businessdetails" element={<MarketplacePage />} />
         <Route path="/businessdetails" element={<FarmBusinessDetails />} />
         <Route path="verifyd" element={<VerificationDetails />} />
         <Route path="bankingpayment" element={<BankingPayment />} />
+        <Route path="farmer" element={<Dashboard />} />
         <Route path="signin" element={<SignPage />} />
+        <Route path="buyerreg" element={<BuyerReg />} />
+        <Route path="verificationcode" element={<VerificationCode />} />
+        <Route path="successpage" element={<SuccessPage />} />
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />

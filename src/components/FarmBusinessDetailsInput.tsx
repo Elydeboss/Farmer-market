@@ -47,7 +47,7 @@ function BusinessDetails() {
 
   return (
     <div className="mt-8 md:mt-0 md:pt-0 flex flex-col h-full">
-      <h1 className=" text-green-2 font-bold pb-2 mb-5 text-[20px] md:text-[32px]">Farm/Business Details</h1>
+      <h1 className=" text-green-btn font-bold pb-2 mb-5 text-[20px] md:text-[32px]">Farm/Business Details</h1>
 
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -126,7 +126,7 @@ function BusinessDetails() {
         {/* Submit */}
         <button
           type="submit"
-          className="text-[#20B658] border border-[#20B658] md:w-[300px] md:mx-auto py-2 rounded-md hover:text-white hover:bg-[#20B658] transition-colors mt-4 cursor-pointer"
+          className="bg-green-btn text-white  border-0 md:w-[300px] md:mx-auto py-2 rounded-md hover:text-white hover:bg-green-dark transition-colors mt-4 cursor-pointer"
         >
           Continue
         </button>

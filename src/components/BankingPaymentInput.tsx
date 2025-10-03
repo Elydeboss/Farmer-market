@@ -127,7 +127,7 @@ const BankingPaymentInput = () => {
         {/* Submit button */}
         <button
           type="submit"
-          className="text-[#20B658] border border-[#20B658] md:w-[300px] mt-5 md:mx-auto py-2 rounded-md hover:text-white hover:bg-[#20B658] transition-colors cursor-pointer"
+          className="text-white border border-[#20B658] md:w-[300px] mt-5 md:mx-auto py-2 rounded-md bg-[#20B658] hover:bg-green-dark  transition-colors cursor-pointer"
         >
           Continue
         </button>

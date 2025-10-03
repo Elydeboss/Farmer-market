@@ -4,10 +4,12 @@
 @theme {
   --color-light: #ffffff;
   --color-green: #22c55e;
-  --color-green-2:#20B658;
+  --color-green-btn:#20B658;
+  --color-green-dark:#0f8139; 
   --color-black: #1e1e1e;
   --color-light-brown: #f5ba53;
   --color-white: #f9f9f9;
+  --color-tet: #F9FBF9;
   --color-pri: #20b658;
   --color-sec: #ffc502;
   --color-sec2: #e6b100;

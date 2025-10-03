@@ -6,6 +6,7 @@ import connectDB from "./config/db";
 import morgan from "morgan";
 import userRoutes from "./routes/user.routes"
 import adminRoutes from "./routes/admin.route";
+import productRoutes from "./routes/product.routes";
 
 const app = express();
 
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 3500;
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use("/api/products", productRoutes);
 
 app.get("/", (_req, res) => {
   res.send("Hello from TypeScript backend!");

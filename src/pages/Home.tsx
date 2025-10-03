@@ -14,78 +14,70 @@ const Home = () => {
   return (
     <>
       {/* NAVBAR */}
-      <Navbar />
+      <div className="">
+        <Navbar />
+      </div>
 
       {/* HERO SECTION */}
       <section
-        className="relative w-full h-[676px] bg-cover bg-center bg-no-repeat"
+        className="relative w-full h-[500px] md:h-[676px] bg-cover bg-center bg-no-repeat sm:overflow-x-hidden"
         style={{ backgroundImage: `url(${Image1})` }}
       >
         {/* Overlay */}
         <div className="absolute inset-0 bg-black opacity-40"></div>
 
-        <div className=" relative max-w-[45%] z-10 px-5  mx-auto flex flex-col   justify-center items-center h-full text-center">
-          <h1 className="text-white  font-semibold text-3xl md:text-4xl lg:text-5xl leading-snug">
+        <div className="relative max-w-2xl z-10 px-5 mx-auto flex flex-col justify-center items-center h-full text-center">
+          <h1 className="text-white font-semibold text-2xl md:text-4xl lg:text-5xl leading-snug">
             Fresh Food From Farmers
           </h1>
-          <p className="text-white text-xl mt-5 mb-10">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Pariatur
-            inventore, sit nobis quibusdam odit cum recusandae, doloremque quod
-            ratione maxime
+          <p className="text-white text-base md:text-lg mt-5 mb-10">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur
+            inventore sit nobis quibusdam.
           </p>
-          <div>
-            <button className="border-0 outline-0 bg-sec cursor-pointer text-black text-sm font-bold py-3 px-5 rounded-md hover:bg-sec2">
-              Discover More
-            </button>
-          </div>
+          <button className="bg-sec text-black text-sm font-bold py-3 px-6 rounded-md hover:bg-sec2">
+            Discover More
+          </button>
         </div>
       </section>
 
       {/* HEALTHY FOOD */}
-      <section className="pt-20 pb-[200px]">
-        <div className="max-w-[1100px] px-5 mx-auto grid  md:grid-cols-[35%_65%] items-center gap-15">
+      <section className="pt-20 pb-20 md:pb-[200px]">
+        <div className="max-w-[1100px] px-5 mx-auto grid gap-10 md:grid-cols-2 items-center">
           {/* IMAGE SECTION */}
-          <div className="relative  w-full">
-            {/* BIG MAGE */}
+          <div className="relative w-full">
             <img
               src={Image2}
               alt="Healthy Food"
               className="w-full rounded-lg h-auto"
             />
-            {/* SMALL IMAGE */}
             <img
               src={Image3}
-              className="absolute bottom-0 right-0 w-45 shadow-lg transform translate-x-28 translate-y-20 "
+              alt="Small Food"
+              className="absolute bottom-0 right-0 w-40 md:w-48 shadow-lg transform translate-x-10 translate-y-10"
             />
           </div>
           {/* TEXT SECTION */}
-          <div className=" w-full flex flex-col justify-center">
-            <h2 className="text-3xl md:text-[32px] text-pri font-bold leading-snug mb-5">
+          <div className="w-full flex flex-col justify-center">
+            <h2 className="text-2xl md:text-[32px] text-pri font-bold leading-snug mb-5">
               Be Healthy & Eat <br />
               Only Fresh Food From Us
             </h2>
-            <p className="text-black">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Quibusdam
+            <p className="text-gray-700">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
             <ul className="mt-6 space-y-3">
               <li className="flex items-center text-gray-500">
-                <span className="w-[10px] h-[10px] bg-pri rounded-full mr-3"></span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta,
-                laudantium.
+                <span className="w-2 h-2 bg-pri rounded-full mr-3"></span>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </li>
               <li className="flex items-center text-gray-500">
-                <span className="w-[10px] h-[10px] bg-pri rounded-full mr-3"></span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta,
-                laudantium.
+                <span className="w-2 h-2 bg-pri rounded-full mr-3"></span>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </li>
             </ul>
-            {/* CTA BUTTON */}
-            <div className="mt-6 mb-20">
-              <button className="border-0 outline-0 bg-black cursor-pointer text-white text-sm font-bold py-3 px-5 rounded-md ">
-                Discover More
-              </button>
-            </div>
+            <button className="mt-6 bg-black text-white text-sm font-bold py-3 px-6 rounded-md">
+              Discover More
+            </button>
           </div>
         </div>
       </section>
@@ -93,34 +85,20 @@ const Home = () => {
       {/* DELIVERY SEC */}
       <section className="pb-20">
         <div className="max-w-[1100px] px-5 mx-auto">
-          <div className="w-1/2">
-            <h2 className="text-3xl md:text-[32px] text-pri font-bold leading-snug mb-5">
+          <div className="w-full md:w-1/2 mb-8">
+            <h2 className="text-2xl md:text-[32px] text-pri font-bold leading-snug mb-5">
               Delivered To Your Doorstep <br />
               Fresh From The Farm
             </h2>
-            <p className="text-gray-700 w-[80%]">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Cupiditate cumque pariatur culpa at aliquid commodi maiores maxime
-              molestiae deleniti a.
+            <p className="text-gray-700">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Cupiditate cumque pariatur culpa.
             </p>
           </div>
-          {/* IMAGE GRID */}
-          <div className="grid mt-15 gap-6 md:grid-cols-[30%_40%_30%]">
-            <img
-              src={Image4}
-              alt="Delivery Image 1"
-              className="rounded-md shadow"
-            />
-            <img
-              src={Image5}
-              alt="Delivery Image 2"
-              className="rounded-md shadow"
-            />
-            <img
-              src={Image6}
-              alt="Delivery Image 3"
-              className="rounded-md shadow"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <img src={Image4} alt="Delivery" className="rounded-md shadow" />
+            <img src={Image5} alt="Delivery" className="rounded-md shadow" />
+            <img src={Image6} alt="Delivery" className="rounded-md shadow" />
           </div>
         </div>
       </section>
@@ -128,64 +106,39 @@ const Home = () => {
       {/* LOVERS SEC */}
       <section className="pb-20">
         <div className="max-w-[1100px] px-5 mx-auto">
-          <div className="w-1/2">
-            <h2 className="text-3xl md:text-[32px] text-pri font-bold leading-snug mb-5">
+          <div className="w-full md:w-1/2 mb-8">
+            <h2 className="text-2xl md:text-[32px] text-pri font-bold leading-snug">
               What Our Green <br />
               Lovers Are Saying
             </h2>
           </div>
-          {/* IMAGE GRID */}
-          <div className="flex flex-col mt-15 gap-12 ">
-            {/* LOVERS 1 */}
-            <div className="flex gap-12 items-center">
-              <img
-                src={Image7}
-                alt="Lovers Image 1"
-                className="w-[118px] rounded-md shadow"
-              />
-              <div className="space-y-6">
-                <h4 className="text-pri text-xl font-semibold">George Udom</h4>
-                <p className="text-gray-500">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Voluptatum reprehenderit ratione nam labore. Illum nihil
-                  ducimus pariatur velit molestiae aliquid?
-                </p>
+          <div className="flex flex-col gap-12">
+            {[
+              { img: Image7, name: "George Udom" },
+              { img: Image8, name: "Ishola Solomon" },
+              { img: Image9, name: "Tunde Badmus" },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col md:flex-row gap-6 items-start md:items-center"
+              >
+                <img
+                  src={item.img}
+                  alt={item.name}
+                  className="w-[100px] md:w-[118px] rounded-md shadow"
+                />
+                <div className="space-y-4">
+                  <h4 className="text-pri text-lg md:text-xl font-semibold">
+                    {item.name}
+                  </h4>
+                  <p className="text-gray-500">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Voluptatum reprehenderit ratione nam labore. Illum nihil
+                    ducimus pariatur velit molestiae aliquid?
+                  </p>
+                </div>
               </div>
-            </div>
-            {/* LOVERS 2 */}
-            <div className="flex gap-12 items-center">
-              <img
-                src={Image8}
-                alt="Lovers Image 1"
-                className="w-[118px] rounded-md shadow"
-              />
-              <div className="space-y-6">
-                <h4 className="text-pri text-xl font-semibold">
-                  Ishola Solomon
-                </h4>
-                <p className="text-gray-500">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Voluptatum reprehenderit <br /> ratione nam labore. Illum
-                  nihil ducimus pariatur velit molestiae aliquid?
-                </p>
-              </div>
-            </div>
-            {/* LOVERS 3 */}
-            <div className="flex gap-12 items-center">
-              <img
-                src={Image9}
-                alt="Lovers Image 1"
-                className="w-[118px] rounded-md shadow"
-              />
-              <div className="space-y-6">
-                <h4 className="text-pri text-xl font-semibold">Tunde Badmus</h4>
-                <p className="text-gray-500">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Voluptatum reprehenderit <br /> ratione nam labore. Illum
-                  nihil ducimus pariatur velit molestiae aliquid?
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

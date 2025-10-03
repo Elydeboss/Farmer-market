@@ -100,7 +100,7 @@ const SingInput = () => {
          <div className="flex items-center flex-row gap-3 pt-3">
           <button
             type="submit"
-            className="text-[#20B658] cursor-pointer font-medium px-8 py-1.5 rounded-md border-2 border-green-600 hover:bg-[#20B658] hover:text-white transition duration-300"
+            className="bg-[#20B658] border-0 text-white cursor-pointer font-medium px-8 py-2 rounded-md  border-green-600 hover:bg-green-dark  transition duration-300"
           >
             Sign In
           </button>
@@ -109,8 +109,8 @@ const SingInput = () => {
           <button
             type="button"
             onClick={() => setIsSignUp(false)}
-            className=" text-[#20B658] cursor-pointer font-medium px-8 py-1.5 rounded-md border-2 border-green-600 hover:bg-[#20B658] hover:text-white transition duration-300"
-          >
+             className="bg-[#20B658] border-0 text-white cursor-pointer font-medium px-8 py-2 rounded-md  border-green-600 hover:bg-green-dark  transition duration-300"
+             >
             Sign Up
            
           </button>
