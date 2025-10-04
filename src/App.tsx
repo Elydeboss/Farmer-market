@@ -1,6 +1,5 @@
 // App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import Home from "./pages/Home"; // you already have this
 import Signup from "./pages/BuyerReg";
 import Dashboard from "../src/pages/Farmerdashboard";
@@ -82,11 +81,6 @@ function App() {
         <Route path="buyerreg" element={<BuyerReg />} />
         <Route path="verificationcode" element={<VerificationCode />} />
         <Route path="successpage" element={<SuccessPage />} />
-<<<<<<< HEAD
-        <Route path="signup2" element={<Signup2 />} />
-=======
-
->>>>>>> 7d3e8af10215410d8263f2029af445eba662dcc7
         <Route path="ordertracking" element={<OrderTracking />} />
 
         {/* Catch-all */}
