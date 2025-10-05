@@ -72,20 +72,14 @@ function App() {
 
         <Route path="/businessdetails" element={<FarmBusinessDetails />} />
         <Route path="/upload" element={<Upload />} />
-        <Route path="verifyd" element={<VerificationDetails />} />
-        <Route path="bankingpayment" element={<BankingPayment />} />
-        <Route path="farmer" element={<Dashboard />} />
-        <Route path="signin" element={<SignPage />} />
-        <Route path="buyerreg" element={<BuyerReg />} />
-        <Route path="verificationcode" element={<VerificationCode />} />
-        <Route path="successpage" element={<SuccessPage />} />
-<<<<<<< HEAD
-        <Route path="buyerreg" element={<BuyerReg />} />
-        <Route path="verificationcode" element={<VerificationCode />} />
-        <Route path="successpage" element={<SuccessPage />} />
-=======
->>>>>>> 24d8a371c984a5c82c5dfe331d74e62c598961d6
-        <Route path="ordertracking" element={<OrderTracking />} />
+        <Route path="/verifyd" element={<VerificationDetails />} />
+        <Route path="/bankingpayment" element={<BankingPayment />} />
+        <Route path="/farmer" element={<Dashboard />} />
+        <Route path="/signin" element={<SignPage />} />
+        <Route path="/buyerreg" element={<BuyerReg />} />
+        <Route path="/verificationcode" element={<VerificationCode />} />
+        <Route path="/successpage" element={<SuccessPage />} />
+        <Route path="/ordertracking" element={<OrderTracking />} />
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
