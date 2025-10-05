@@ -79,9 +79,12 @@ function App() {
         <Route path="buyerreg" element={<BuyerReg />} />
         <Route path="verificationcode" element={<VerificationCode />} />
         <Route path="successpage" element={<SuccessPage />} />
+<<<<<<< HEAD
         <Route path="buyerreg" element={<BuyerReg />} />
         <Route path="verificationcode" element={<VerificationCode />} />
         <Route path="successpage" element={<SuccessPage />} />
+=======
+>>>>>>> 24d8a371c984a5c82c5dfe331d74e62c598961d6
         <Route path="ordertracking" element={<OrderTracking />} />
 
         {/* Catch-all */}

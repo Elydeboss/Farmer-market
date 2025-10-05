@@ -1,18 +1,26 @@
 import { Router } from "express";
-import { register, login, forgotPassword, resetPassword, verifyEmail, resendOtp, createAdmin } from "../controllers/user.controller";
-import { authMiddleware, authorizeRoles } from "../middlewares/auth.middleware";
-
+import {
+  registerFarmer,
+  registerBuyer,
+  registerLogistics,
+  login,
+  verifyEmail,
+  resendOtp,
+  forgotPassword,
+  resetPassword,
+} from "../controllers/user.controller";
 
 const router = Router();
 
-router.post("/register", register);
+// Separate endpoints that match frontend buttons
+router.post("/register/farmer", registerFarmer);
+router.post("/register/buyer", registerBuyer);
+router.post("/register/logistics", registerLogistics);
+
 router.post("/login", login);
-router.post("/verify-email", verifyEmail);   
-router.post("/resend-otp", resendOtp); 
+router.post("/verify-email", verifyEmail);
+router.post("/resend-otp", resendOtp);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
-
-//  Admin-only endpoints
-router.post("/create-admin", authMiddleware, authorizeRoles("admin"), createAdmin);
 
 export default router;

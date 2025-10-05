@@ -1,146 +1,212 @@
 import { Request, Response } from "express";
-import User from "../models/user.schema";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { Secret, SignOptions } from "jsonwebtoken";
+import User from "../models/user.schema";
 import { sendEmail } from "../config/email";
 
-export const register = async (req: Request, res: Response) => {
+
+const OTP_TTL_MS = 10 * 60 * 1000;
+
+// Generate a 6-digit OTP
+const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+
+const jwtSecret: Secret = process.env.JWT_SECRET || "secret";
+const jwtExpiry: string = process.env.JWT_EXPIRATION || "1d";
+
+export const registerFarmer = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { firstName, lastName, phoneNumber, email, password, confirmPassword, agreeToTerms } = req.body;
 
-    if (role === "admin") {
-      return res.status(403).json({ message: "You cannot self-register as an admin" });
-    }
-
-    //  Sanitize role (allow only these on public signup)
-    const allowedRoles = ["farmer", "buyer", "logistics"];
-    const userRole = allowedRoles.includes(role) ? role : "buyer";
-    //  Validation checks
-    if (!name || !email || !password) {
+    if (!firstName || !lastName || !phoneNumber || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: "All fields are required" });
     }
-    if (password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters long" });
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+    if (!agreeToTerms) {
+      return res.status(400).json({ message: "You must agree to the Terms of Use" });
     }
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "Email already exists" });
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    //  generate OTP on register
-    const otp = Math.floor(100000 + Math.random() * 900000).toString(); 
-    const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
-
-    const user = await User.create({ 
-      name, 
-      email, 
-      password: hashedPassword, 
-      role : userRole,
-      otp,                
-      otpExpires,         
-      isVerified: false   
+    await User.create({
+      name: `${firstName} ${lastName}`,
+      email,
+      password: hashedPassword,
+      role: "farmer",
+      isVerified: true, 
     });
 
-    //  send OTP by email
-    await sendEmail(
-      user.email,
-      "Verify your Agrolink account",
-      `Welcome to Agrolink! Your verification code is ${otp}. It will expire in 10 minutes.`
-    );
-
-    res.status(201).json({ message: "User registered. Please verify your email with the OTP sent." });
-  } catch (error) {
-    res.status(500).json({ error });
+    return res.status(201).json({ message: "Farmer registered successfully" });
+  } catch (err) {
+    console.error("Register Farmer Error:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
 
+export const registerBuyer = async (req: Request, res: Response) => {
+  try {
+    const { fullName, phoneNumber, email, password, confirmPassword, agreeToTerms } = req.body;
+
+    if (!fullName || !phoneNumber || !email || !password || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+    if (!agreeToTerms) {
+      return res.status(400).json({ message: "You must agree to the Terms of Use" });
+    }
+
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.create({
+      name: fullName,
+      email,
+      password: hashedPassword,
+      role: "buyer",
+      isVerified: true, 
+    });
+
+    return res.status(201).json({ message: "Buyer registered successfully" });
+  } catch (err) {
+    console.error("Register Buyer Error:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+export const registerLogistics = async (req: Request, res: Response) => {
+  try {
+    const { name, phoneNumber, email, password, confirmPassword, agreeToTerms } = req.body;
+
+    if (!name || !phoneNumber || !email || !password || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+    if (!agreeToTerms) {
+      return res.status(400).json({ message: "You must agree to the Terms of Use" });
+    }
+
+    const existing = await User.findOne({ email }); 
+    if (existing) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: "logistics",
+      isVerified: true, 
+    });
+
+    return res.status(201).json({ message: "Logistics registered successfully" });
+  } catch (err) {
+    console.error("Register Logistics Error:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email }).select("+password");
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
+    }
+
+    const user = await User.findOne({ email }).select("+password"); 
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || "secret", {
-      expiresIn: "1d",
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      jwtSecret,
+      { expiresIn: jwtExpiry } as SignOptions
+    );
+
+    return res.json({
+      message: "Login successful",
+      token,
+      role: user.role,
     });
-
-    res.json({ message: "Login successful", token, isVerified: user.isVerified });
-  } catch (error) {
-    res.status(500).json({ error });
+  } catch (err) {
+    console.error("Login Error:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-// verify email using OTP
+
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
     const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP required" });
+    }
 
-    const user = await User.findOne({ email, otp, otpExpires: { $gt: new Date() } });
-    if (!user) return res.status(400).json({ message: "Invalid or expired OTP" });
+    const user = await User.findOne({ email, otp, otpExpires: { $gt: new Date() } }); 
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
 
     user.isVerified = true;
     user.otp = undefined;
     user.otpExpires = undefined;
     await user.save();
 
-    res.json({ message: "Email verified successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    return res.json({ message: "Email verified successfully" });
+  } catch (err) {
+    console.error("Verify Email Error:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-//  resend OTP
+
 export const resendOtp = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: "Email required" });
+    }
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const user = await User.findOne({ email }); 
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = generateOtp();
     user.otp = otp;
-    user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+    user.otpExpires = new Date(Date.now() + OTP_TTL_MS);
     await user.save();
 
-    await sendEmail(
-      user.email,
-      "Resend Verification Code",
-      `Your new OTP is ${otp}. It will expire in 10 minutes.`
-    );
+    await sendEmail(email, "Your new OTP", `Your OTP is ${otp}. It expires in 10 minutes.`); 
 
-    res.json({ message: "New OTP sent to email" });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-//  Create a new admin
-export const createAdmin = async (req: Request, res: Response) => {
-  try {
-    const { name, email, password } = req.body;
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "Email already exists" });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newAdmin = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      role: "admin",
-      isVerified: true, // admins are auto-verified
-    });
-
-    res.status(201).json({ message: "Admin created successfully", admin: newAdmin });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    return res.json({ message: "New OTP sent" });
+  } catch (err) {
+    console.error("Resend OTP Error:", err);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -148,9 +214,8 @@ export const createAdmin = async (req: Request, res: Response) => {
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
-
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      return res.status(400).json({ message: "Email required" });
     }
 
     const user = await User.findOne({ email });
@@ -158,22 +223,16 @@ export const forgotPassword = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
+    const otp = generateOtp();
     user.otp = otp;
-    user.otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    user.otpExpires = new Date(Date.now() + OTP_TTL_MS);
     await user.save();
 
-    // Send OTP by email
-    await sendEmail(
-      user.email,
-      "Password Reset OTP",
-      `Your OTP code is ${otp}. It will expire in 10 minutes.`
-    );
+    await sendEmail(email, "Password Reset OTP", `Your OTP is ${otp}. It expires in 10 minutes.`);
 
-    return res.json({ message: "OTP sent to your email" });
-  } catch (error) {
+    return res.json({ message: "OTP sent to email" });
+  } catch (err) {
+    console.error("Forgot Password Error:", err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -181,37 +240,26 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   try {
     const { email, otp, newPassword, confirmPassword } = req.body;
-
     if (!email || !otp || !newPassword || !confirmPassword) {
       return res.status(400).json({ message: "All fields are required" });
     }
-
     if (newPassword !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    const user = await User.findOne({
-      email,
-      otp,
-      otpExpires: { $gt: new Date() }, // must still be valid
-    });
-
+    const user = await User.findOne({ email, otp, otpExpires: { $gt: new Date() } }).select("+password"); 
     if (!user) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
-
-    // Clear OTP fields after use
+    user.password = await bcrypt.hash(newPassword, 10);
     user.otp = undefined;
     user.otpExpires = undefined;
-
     await user.save();
 
     return res.json({ message: "Password reset successful" });
-  } catch (error) {
+  } catch (err) {
+    console.error("Reset Password Error:", err);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
