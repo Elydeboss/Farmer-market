@@ -34,15 +34,22 @@ const OrderTracking: React.FC = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col overflow-hidden bg-[#FDFDFD] font-dm-sans text-gray-800">
+    <div className="h-screen w-screen flex flex-col overflow-hidden bg-light font-dm-sans text-gray-800">
       {/* === Header === */}
-      <header className="flex items-center justify-between bg-pri text-white px-6 py-4 flex-shrink-0 shadow-md">
-        <img src={logo} alt="Logo" className="w-40 md:w-48 object-contain" />
+      <header className=" bg-pri text-white px-6 py-4 shadow-md cursor-pointer
+   
+      ">
+        <div className="flex items-center justify-between max-w-[1100px] flex-shrink-0   m-auto">
+
+       
+      <Link to='/'>
+      <img src={logo} alt="Logo" className="w-40 md:w-48 object-contain" />
+      </Link>  
 
         <div className="flex items-center gap-5 relative">
           {/* Notification */}
           <button
-            onClick={() => alert("Notifications clicked!")}
+            
             className="relative hover:text-yellow-300 transition"
           >
             <Bell className="w-6 h-6" />
@@ -55,7 +62,7 @@ const OrderTracking: React.FC = () => {
 
           {/* Settings */}
           <button
-            onClick={() => alert("Settings clicked!")}
+            
             className="hover:text-yellow-300 transition"
           >
             <Settings className="w-6 h-6" />
@@ -87,13 +94,15 @@ const OrderTracking: React.FC = () => {
             )}
           </div>
         </div>
+         </div>
       </header>
 
       {/* === Main Content === */}
-      <main className="flex-1 flex flex-col justify-center items-center relative px-4 sm:px-10 overflow-hidden">
+      <main className="flex-1 flex flex-col justify-center items-center relative px-4 sm:px-10 overflow-hidden  min-w-md
+      ">
         {/* Back Button */}
         <Link
-          to="/dashboard"
+          to="/cartpage"
           className="absolute top-5 left-5 hover:opacity-70 transition"
         >
           <img src={back} alt="Back" className="w-7" />
@@ -139,7 +148,8 @@ const OrderTracking: React.FC = () => {
               At Your Doorstep in Three Easy Steps
             </h3>
 
-            <div className="flex justify-between items-center gap-3 md:gap-6 flex-wrap md:flex-nowrap">
+            <div className="flex justify-between items-center gap-3 md:gap-6 flex-wrap md:flex-nowrap
+            ">
               {/* Step 1 */}
               <div
                 className={`flex flex-col items-center flex-1 min-w-[100px] sm:min-w-[150px] p-3 rounded-lg transition ${
