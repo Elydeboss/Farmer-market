@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react"; // for password toggle
 import backIcon from "../assets/arrow-icon.svg";
 
 type AuthenticateForm = {
@@ -11,6 +12,52 @@ type AuthenticateForm = {
   password: string;
   confirmPassword: string;
   agreeToTerms: boolean;
+};
+
+type InputProps = {
+  name: keyof AuthenticateForm;
+  label: string;
+  type: string;
+  value: string | boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  showPasswordToggle?: boolean;
+};
+
+const InputField = ({
+  name,
+  label,
+  type,
+  value,
+  onChange,
+  showPasswordToggle,
+}: InputProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="flex flex-col gap-1 relative">
+      <label htmlFor={name} className="font-medium">
+        {label}
+      </label>
+      <input
+        type={showPasswordToggle && showPassword ? "text" : type}
+        name={name}
+        placeholder={`Enter ${label}`}
+        value={typeof value === "string" ? value : ""}
+        onChange={onChange}
+        required
+        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition pr-10"
+      />
+      {showPasswordToggle && (
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+        >
+          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      )}
+    </div>
+  );
 };
 
 function CreateAccountInputField() {
@@ -28,9 +75,9 @@ function CreateAccountInputField() {
 
   const [loading, setLoading] = useState(false);
   const [formInputError, setFormInputError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (formInputError) setFormInputError(null); // clear error on input
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -38,12 +85,15 @@ function CreateAccountInputField() {
     }));
   };
 
+  const showError = (message: string) => {
+    setFormInputError(message);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormInputError(null);
-    setSuccess(null);
 
-    // 🔒 Validation
+    // Validation
     if (
       !formData.firstName ||
       !formData.lastName ||
@@ -59,6 +109,10 @@ function CreateAccountInputField() {
       return showError("You must accept the Terms of Use!");
     }
 
+    if (formData.password.length < 6) {
+      return showError("Password must be at least 6 characters.");
+    }
+
     if (formData.password !== formData.confirmPassword) {
       return showError("Passwords do not match!");
     }
@@ -71,27 +125,17 @@ function CreateAccountInputField() {
       return showError("Please enter a valid email address.");
     }
 
-    // ✅ Send data to API
     try {
       setLoading(true);
 
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:3500/api/users/register/farmer",
-        {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phoneNumber: formData.phoneNumber,
-          email: formData.email,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-          agreeToTerms: formData.agreeToTerms,
-        },
+        { ...formData },
         { headers: { "Content-Type": "application/json" } }
       );
 
-      showSuccess(response.data?.message || "Account created successfully 🎉");
-
-      // ✅ Reset form
+      navigate("/businessdetails");
+      // Reset form
       setFormData({
         firstName: "",
         lastName: "",
@@ -102,38 +146,16 @@ function CreateAccountInputField() {
         agreeToTerms: false,
       });
 
-    
-      setTimeout(() => {
-        navigate("/businessdetails");
-      }, 1500);
+      
     } catch (error: any) {
-      console.error("Registration Error:", error);
-
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          showError(error.response.data?.message || "Server error occurred");
-        } else if (error.request) {
-          showError("No response from server. Please check your connection.");
-        } else {
-          showError("Error setting up the request.");
-        }
+      if (axios.isAxiosError<{ message: string }>(error)) {
+        showError(error.response?.data?.message || "Server error occurred");
       } else {
         showError("Unexpected error occurred. Please try again.");
       }
     } finally {
       setLoading(false);
     }
-  };
-
-  const showError = (message: string) => {
-    setFormInputError(message);
-    setTimeout(() => setFormInputError(null), 5000);
-  };
-
-  const showSuccess = (message: string) => {
-    setSuccess(message);
-    setFormInputError(null);
-    setTimeout(() => setSuccess(null), 5000);
   };
 
   return (
@@ -154,29 +176,50 @@ function CreateAccountInputField() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-sm">
-        {[
-          { name: "firstName", label: "First Name", type: "text" },
-          { name: "lastName", label: "Last Name", type: "text" },
-          { name: "phoneNumber", label: "Phone Number", type: "tel" },
-          { name: "email", label: "Email Address", type: "email" },
-          { name: "password", label: "Password", type: "password", span:2 },
-          { name: "confirmPassword", label: "Confirm Password", type: "password" },
-        ].map((field) => (
-          <div key={field.name} className="flex flex-col gap-1">
-            <label htmlFor={field.name} className="font-medium">
-              {field.label}
-            </label>
-            <input
-              type={field.type}
-              name={field.name}
-              placeholder={`Enter ${field.label}`}
-              value={(formData as any)[field.name]}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-            />
-          </div>
-        ))}
+        <InputField
+          name="firstName"
+          label="First Name"
+          type="text"
+          value={formData.firstName}
+          onChange={handleChange}
+        />
+        <InputField
+          name="lastName"
+          label="Last Name"
+          type="text"
+          value={formData.lastName}
+          onChange={handleChange}
+        />
+        <InputField
+          name="phoneNumber"
+          label="Phone Number"
+          type="tel"
+          value={formData.phoneNumber}
+          onChange={handleChange}
+        />
+        <InputField
+          name="email"
+          label="Email Address"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        <InputField
+          name="password"
+          label="Password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          showPasswordToggle
+        />
+        <InputField
+          name="confirmPassword"
+          label="Confirm Password"
+          type="password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          showPasswordToggle
+        />
 
         {/* Terms */}
         <div className="flex items-center gap-2 mt-2 text-sm">
@@ -197,14 +240,8 @@ function CreateAccountInputField() {
 
         {/* Feedback */}
         {formInputError && (
-          <div className="text-red-500 text-sm bg-red-100 border border-red-300 px-2 py-1 rounded">
+          <div className="text-red-500 text-[16px] bg-red-100 border border-red-300 px-2 rounded">
             {formInputError}
-          </div>
-        )}
-
-        {success && (
-          <div className="text-green-600 text-sm bg-green-100 border border-green-300 px-2 py-1 rounded">
-            {success}
           </div>
         )}
 
@@ -214,7 +251,9 @@ function CreateAccountInputField() {
             type="submit"
             disabled={loading}
             className={`${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#20B658] hover:bg-green-700"
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#20B658] hover:bg-green-700"
             } text-white font-medium text-sm px-5 py-2 rounded-md transition duration-300`}
           >
             {loading ? "Signing Up..." : "Sign Up"}

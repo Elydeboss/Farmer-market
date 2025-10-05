@@ -4,15 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import bgImage from "../assets/woman-farm.png";
 import logo from "../assets/Logo 2.png";
 import backIcon from "../assets/arrow-icon.svg";
+import { Eye, EyeOff } from "lucide-react"; // 👁 password toggle
 import { useFarmerContext } from "../context/FarmerContext";
 
-
 const BuyerReg: React.FC = () => {
-
-   const {setPhone} = useFarmerContext()
-
-
-   const navigate = useNavigate();
+  const { setPhone } = useFarmerContext();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     fullName: "",
@@ -31,9 +28,9 @@ const BuyerReg: React.FC = () => {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
- 
-  
- 
+  const [showPassword, setShowPassword] = useState(false); // 👁 toggle
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // 👁 toggle
+
   // Handle input changes
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -46,6 +43,7 @@ const BuyerReg: React.FC = () => {
 
     // clear field-specific error when user types
     setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    if (message) setMessage(""); // clear global messages as user types
   };
 
   // Validation
@@ -82,7 +80,6 @@ const BuyerReg: React.FC = () => {
     try {
       validateForm();
 
-      //Send correct data keys for backend
       const payload = {
         fullName: form.fullName,
         phoneNumber: form.phoneNumber,
@@ -99,15 +96,11 @@ const BuyerReg: React.FC = () => {
       );
 
       setMessage(res.data.message || "Account created successfully 🎉");
-       setTimeout(() => {
+      setPhone(form.phoneNumber);
+
+      setTimeout(() => {
         navigate("/verificationcode");
       }, 1500);
-
-      setPhone(form.phoneNumber)
-
-
-    
-     
     } catch (error: any) {
       console.error("Registration Error:", error);
 
@@ -171,113 +164,190 @@ const BuyerReg: React.FC = () => {
           </div>
 
           {/* Form */}
-         <form
-  onSubmit={handleSubmit}
-  className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm"
->
-  {[
-    { label: "Full Name", name: "fullName", type: "text", span: 2, placeholder: "Enter your full name" },
-    { label: "Phone Number", name: "phoneNumber", type: "tel", placeholder: "Enter your phone number" },
-    { label: "Email", name: "email", type: "email", placeholder: "Enter your email address" },
-    { label: "Password", name: "password", type: "password", span: 2, placeholder: "Create a password" },
-    { label: "Confirm Password", name: "confirmPassword", type: "password", span: 2, placeholder: "Re-enter your password" },
-  ].map(({ label, name, type, span, placeholder }) => (
-    <div key={name} className={span === 2 ? "sm:col-span-2" : ""}>
-      <label className="block text-sm font-medium">{label}</label>
-      <input
-        type={type}
-        name={name}
-        value={(form as any)[name]}
-        onChange={handleChange}
-        required
-        placeholder={placeholder}
-        className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 ${
-          fieldErrors[name]
-            ? "border-red-500 focus:ring-red-400"
-            : "focus:ring-green-btn"
-        } transition text-sm`}
-      />
-      {fieldErrors[name] && (
-        <p className="text-red-500 text-xs mt-1">{fieldErrors[name]}</p>
-      )}
-    </div>
-  ))}
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm"
+          >
+            {/* Normal Inputs */}
+            {[
+              {
+                label: "Full Name",
+                name: "fullName",
+                type: "text",
+                span: 2,
+                placeholder: "Enter your full name",
+              },
+              {
+                label: "Phone Number",
+                name: "phoneNumber",
+                type: "tel",
+                placeholder: "Enter your phone number",
+              },
+              {
+                label: "Email",
+                name: "email",
+                type: "email",
+                placeholder: "Enter your email address",
+              },
+            ].map(({ label, name, type, span, placeholder }) => (
+              <div key={name} className={span === 2 ? "sm:col-span-2" : ""}>
+                <label className="block text-sm font-medium">{label}</label>
+                <input
+                  type={type}
+                  name={name}
+                  value={(form as any)[name]}
+                  onChange={handleChange}
+                  required
+                  placeholder={placeholder}
+                  className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 ${
+                    fieldErrors[name]
+                      ? "border-red-500 focus:ring-red-400"
+                      : "focus:ring-green-btn"
+                  } transition text-sm`}
+                />
+                {fieldErrors[name] && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {fieldErrors[name]}
+                  </p>
+                )}
+              </div>
+            ))}
 
-  {/* State */}
-  <div>
-    <label className="block text-sm font-medium">State</label>
-    <select
-      name="state"
-      value={form.state}
-      onChange={handleChange}
-      required
-      className={`w-full mt-1 p-2 border rounded-md text-gray-600 text-sm focus:outline-none focus:ring-2 ${
-        fieldErrors.state
-          ? "border-red-500 focus:ring-red-400"
-          : "focus:ring-green-btn"
-      }`}
-    >
-      <option value="">Select State</option>
-      <option value="lagos">Lagos</option>
-      <option value="abuja">Abuja</option>
-    </select>
-    {fieldErrors.state && (
-      <p className="text-red-500 text-xs mt-1">{fieldErrors.state}</p>
-    )}
-  </div>
+            {/* Password with show/hide 👁 */}
+            <div className="sm:col-span-2 relative">
+              <label className="block text-sm font-medium">Password</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+                placeholder="Create a password"
+                className={`w-full mt-1 p-2 border rounded-md pr-10 focus:outline-none focus:ring-2 ${
+                  fieldErrors.password
+                    ? "border-red-500 focus:ring-red-400"
+                    : "focus:ring-green-btn"
+                } transition text-sm`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+              {fieldErrors.password && (
+                <p className="text-red-500 text-xs mt-1">
+                  {fieldErrors.password}
+                </p>
+              )}
+            </div>
 
-  {/* LGA */}
-  <div>
-    <label className="block text-sm font-medium">LGA</label>
-    <select
-      name="lga"
-      value={form.lga}
-      onChange={handleChange}
-      required
-      className={`w-full mt-1 p-2 border rounded-md text-gray-600 text-sm focus:outline-none focus:ring-2 ${
-        fieldErrors.lga
-          ? "border-red-500 focus:ring-red-400"
-          : "focus:ring-green-btn"
-      }`}
-    >
-      <option value="">Select LGA</option>
-      <option value="ikeja">Ikeja</option>
-      <option value="garki">Garki</option>
-    </select>
-    {fieldErrors.lga && (
-      <p className="text-red-500 text-xs mt-1">{fieldErrors.lga}</p>
-    )}
-  </div>
+            {/* Confirm Password with show/hide 👁 */}
+            <div className="sm:col-span-2 relative">
+              <label className="block text-sm font-medium">Confirm Password</label>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                required
+                placeholder="Re-enter your password"
+                className={`w-full mt-1 p-2 border rounded-md pr-10 focus:outline-none focus:ring-2 ${
+                  fieldErrors.confirmPassword
+                    ? "border-red-500 focus:ring-red-400"
+                    : "focus:ring-green-btn"
+                } transition text-sm`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+              >
+                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+              {fieldErrors.confirmPassword && (
+                <p className="text-red-500 text-xs mt-1">
+                  {fieldErrors.confirmPassword}
+                </p>
+              )}
+            </div>
 
-  {/* Optional Fields */}
-  <div>
-    <label className="block text-[16px] font-medium">
-      Business Name <span className="text-gray-400">(optional)</span>
-    </label>
-    <input
-      type="text"
-      name="businessName"
-      value={form.businessName}
-      onChange={handleChange}
-      placeholder="Enter your business name"
-      className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-btn text-sm"
-    />
-  </div>
+            {/* State & LGA */}
+            <div>
+              <label className="block text-sm font-medium">State</label>
+              <select
+                name="state"
+                value={form.state}
+                onChange={handleChange}
+                required
+                className={`w-full mt-1 p-2 border rounded-md text-gray-600 text-sm focus:outline-none focus:ring-2 ${
+                  fieldErrors.state
+                    ? "border-red-500 focus:ring-red-400"
+                    : "focus:ring-green-btn"
+                }`}
+              >
+                <option value="">Select State</option>
+                <option value="lagos">Lagos</option>
+                <option value="abuja">Abuja</option>
+              </select>
+              {fieldErrors.state && (
+                <p className="text-red-500 text-xs mt-1">
+                  {fieldErrors.state}
+                </p>
+              )}
+            </div>
 
-  <div>
-    <label className="block text-sm font-medium">
-      Business Type <span className="text-gray-400">(optional)</span>
-    </label>
-    <input
-      type="text"
-      name="businessType"
-      value={form.businessType}
-      onChange={handleChange}
-      placeholder="Enter your business type"
-      className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-btn text-sm"
-    />
-  </div>
+            <div>
+              <label className="block text-sm font-medium">LGA</label>
+              <select
+                name="lga"
+                value={form.lga}
+                onChange={handleChange}
+                required
+                className={`w-full mt-1 p-2 border rounded-md text-gray-600 text-sm focus:outline-none focus:ring-2 ${
+                  fieldErrors.lga
+                    ? "border-red-500 focus:ring-red-400"
+                    : "focus:ring-green-btn"
+                }`}
+              >
+                <option value="">Select LGA</option>
+                <option value="ikeja">Ikeja</option>
+                <option value="garki">Garki</option>
+              </select>
+              {fieldErrors.lga && (
+                <p className="text-red-500 text-xs mt-1">{fieldErrors.lga}</p>
+              )}
+            </div>
 
+            {/* Optional Fields */}
+            <div>
+              <label className="block text-sm font-medium">
+                Business Name <span className="text-gray-400">(optional)</span>
+              </label>
+              <input
+                type="text"
+                name="businessName"
+                value={form.businessName}
+                onChange={handleChange}
+                placeholder="Enter your business name"
+                className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-btn text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium">
+                Business Type <span className="text-gray-400">(optional)</span>
+              </label>
+              <input
+                type="text"
+                name="businessType"
+                value={form.businessType}
+                onChange={handleChange}
+                placeholder="Enter your business type"
+                className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-btn text-sm"
+              />
+            </div>
 
             {/* Terms */}
             <div className="sm:col-span-2 flex items-center space-x-2 mt-2">
@@ -289,10 +359,8 @@ const BuyerReg: React.FC = () => {
                 className="w-4 h-4 border-gray-300 rounded focus:ring-green-btn"
               />
               <label className="text-sm text-gray-700">
-                I agree to the{" "}
-                <Link to="/terms" className="text-green-btn underline">
-                  Terms of Use
-                </Link>
+                I agree to FarmMarket Terms & Conditions and privacy Policy
+               
               </label>
             </div>
             {fieldErrors.agreeToTerms && (
