@@ -6,6 +6,8 @@ import connectDB from "./config/db";
 import morgan from "morgan";
 import userRoutes from "./routes/user.routes"
 import adminRoutes from "./routes/admin.route";
+import productRoutes from "./routes/product.routes";
+
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.get("/", (_req, res) => {
 
 app.use('/api/users', userRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/products", productRoutes);
+
 
 
 app.listen(PORT, () => {

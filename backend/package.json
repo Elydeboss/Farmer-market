@@ -8,7 +8,8 @@
     "seed": "ts-node src/seedAdmin.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed:products": "ts-node-dev --transpile-only src/seeders/product.seeder.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,11 +21,11 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose": "^5.11.96",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.6.0",
+    "@types/node": "^24.6.2",
     "@types/nodemailer": "^7.0.2",
     "nodemon": "^3.1.10",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
