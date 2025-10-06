@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/arrow-icon.svg";
 
 function VerificationDetailsInput() {
+  const navigate = useNavigate();
   const [idFile, setIdFile] = useState<File | null>(null);
   const [cacFile, setCacFile] = useState<File | null>(null);
   const [formInputError, setFormInputError] = useState<string | null>(null);
@@ -21,28 +22,35 @@ function VerificationDetailsInput() {
 
   const handleFileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!idFile || !cacFile) {
       showError("Please upload both files before submitting.");
       return;
     }
-   
-    // Handle actual upload here
+
+    // Just navigate after successful file selection
+    navigate("/bankingpayment");
   };
 
   const showError = (message: string) => {
-    setFormInputError(message); 
+    setFormInputError(message);
     setTimeout(() => setFormInputError(null), 5000); // Clear after 5 seconds
-    };
+  };
 
   return (
-      <div className="mt-2 md:mt-0  flex flex-col h-full">
-
-        <div className="relative  gap-3 mb-6">
+    <div className="mt-2 md:mt-0 flex flex-col h-full">
+      <div className="relative gap-3 mb-6">
         <Link to="/businessdetails">
-        <img src={logo} className="w-6 absolute -left-8 md:-left-10 top-0.5 hover:opacity-50" alt="Back" /> </Link> 
-        <h1 className="  text-green-btn font-bold text-md sm:text-lg"> Verification of Details</h1>
+          <img
+            src={logo}
+            className="w-6 absolute -left-8 md:-left-10 top-0.5 hover:opacity-50"
+            alt="Back"
+          />
+        </Link>
+        <h1 className="text-green-btn font-bold text-md sm:text-lg">
+          Verification of Details
+        </h1>
       </div>
-
 
       <form onSubmit={handleFileSubmit} className="py-5 flex flex-col gap-10">
         {/* Government ID */}
@@ -59,7 +67,9 @@ function VerificationDetailsInput() {
                        file:bg-gray-200 file:border-0 file:rounded-md file:px-3 file:py-2 file:text-sm file:font-light file:text-gray-700 hover:file:bg-gray-400 file:cursor-pointer"
           />
           {idFile && (
-            <span className="text-sm text-green-600 mt-1">Selected: {idFile.name}</span>
+            <span className="text-sm text-green-600 mt-1">
+              Selected: {idFile.name}
+            </span>
           )}
         </div>
 
@@ -77,9 +87,13 @@ function VerificationDetailsInput() {
                        file:bg-gray-200 file:border-0 file:rounded-md file:px-3 file:py-2 file:text-sm file:font-light file:text-gray-700 hover:file:bg-gray-400 file:cursor-pointer"
           />
           {cacFile && (
-            <span className="text-sm text-green-600 mt-1">Selected: {cacFile.name}</span>
+            <span className="text-sm text-green-600 mt-1">
+              Selected: {cacFile.name}
+            </span>
           )}
         </div>
+
+        {/* Error */}
         {formInputError && (
           <div className="text-red-600 text-sm mt-2">{formInputError}</div>
         )}
@@ -92,7 +106,6 @@ function VerificationDetailsInput() {
         </button>
       </form>
     </div>
-    
   );
 }
 

@@ -1,70 +1,105 @@
-import { useState } from "react"
-import {Link } from "react-router-dom"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import logo from "../assets/arrow-icon.svg";
 
-type check = {
+type AuthCredentials = {
   email: string;
   password: string;
 };
 
-const SingInput = () => {
-  const [formData, setFormData] = useState<check>({
+const SignInput = () => {
+  const [formData, setFormData] = useState<AuthCredentials>({
     email: "",
-    password: "",   
+    password: "",
   });
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [formInputError, setFormInputError ] = useState<string | null>(null);
-   const [success, setSuccess] = useState<string | null>(null); 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const navigate = useNavigate();
+
+  // handle input change
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // show timed error
   const showError = (message: string) => {
-    setFormInputError(message);
-    setTimeout(() => setFormInputError(null), 5000); // Clear after 5 seconds
-  }
-    const showSuccess = (message: string) => {
+    setError(message);
+    setTimeout(() => setError(null), 5000);
+  };
+
+  // show timed success
+  const showSuccess = (message: string) => {
     setSuccess(message);
-    setTimeout(() => setSuccess(null), 5000); // Clear after 5 seconds
-  }
+    setTimeout(() => setSuccess(null), 5000);
+  };
 
-  function handleSubmit(e: React.FormEvent) {
+  // handle form submit
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Check required fields manually 
-  if (
-    !formData.email ||
-    !formData.password 
-  ) {
-    showError("All fields are required!");
-    return;
-  }
-  // If valid, do something (API, console, etc)
-  console.log("Form submitted:", formData);
-    showSuccess("Signed in successfully!");
-    setFormData({
-      email: "",
-      password: "",     
-    });
-  }
 
+    if (!formData.email || !formData.password) {
+      showError("All fields are required!");
+      return;
+    }
 
-  
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccess(null);
+
+      const response = await axios.post(
+        "http://localhost:3500/api/users/login",
+        formData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      const data = response.data;
+
+      // Save token
+      localStorage.setItem("token", data.token);
+
+      showSuccess("Signed in successfully!");
+      console.log("User logged in:", data);
+
+      // Navigate to dashboard
+      navigate("/buyerdashboard");
+
+      // Reset form
+      setFormData({ email: "", password: "" });
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response) {
+        showError(err.response.data.message || "Login failed");
+      } else {
+        showError("Something went wrong");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="mt-8 md:mt-0 md:pt-0  flex flex-col h-full">
-
-        <div className="relative  gap-3 mb-6">
-     <Link to="/">
-     <img src={logo} className="w-6 absolute -left-8 md:-left-10 top-0.5 hover:opacity-50" alt="Back" /> </Link> 
-     <h1 className="  text-green-btn font-bold text-md sm:text-lg">  Sign In to your Account </h1>
+    <div className="mt-8 md:mt-0 flex flex-col h-full">
+      {/* Header */}
+      <div className="relative mb-6">
+        <Link to="/">
+          <img
+            src={logo}
+            className="w-6 absolute -left-8 md:-left-10 top-0.5 hover:opacity-50"
+            alt="Back"
+          />
+        </Link>
+        <h1 className="text-green-btn font-bold text-md sm:text-lg">
+          Sign In to your Account
+        </h1>
       </div>
 
-    
+      {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {/* Email Address */ }
+        {/* Email */}
         <div className="flex flex-col gap-1">
           <label htmlFor="email" className="font-medium">
             Email Address
@@ -76,12 +111,13 @@ const SingInput = () => {
             placeholder="Enter Email Address"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md px-2 py-2 focus:outline-none cursor-pointer focus:ring-2 focus:ring-green-500 text-[14px]"
+            className="w-full border border-gray-300 rounded-md px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
-        {/* Password */ }
+
+        {/* Password */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="font-medium">    
+          <label htmlFor="password" className="font-medium">
             Password
           </label>
           <input
@@ -91,41 +127,36 @@ const SingInput = () => {
             placeholder="Enter Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md px-2 py-2 focus:outline-none cursor-pointer focus:ring-2 focus:ring-green-500 text-[14px]"
+            className="w-full border border-gray-300 rounded-md px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
 
-        {formInputError && (
-          <div className="text-red-600 text-sm mt-1">{formInputError}</div>
-        )}
-        {success && (
-          <div className="text-green-600 text-sm mt-1">{success}</div>
-        )}
+        {/* Feedback messages */}
+        {error && <div className="text-red-600 text-sm">{error}</div>}
+        {success && <div className="text-green-600 text-sm">{success}</div>}
 
-         <div className="flex items-center flex-row gap-3 pt-3">
+        {/* Buttons */}
+        <div className="flex flex-row gap-3 pt-3">
           <button
             type="submit"
-            className="bg-[#20B658] border-0 text-white cursor-pointer font-medium text-xs  px-4 md:px-8  py-2 rounded-md  border-green-600 hover:bg-green-dark  transition duration-300"
+            disabled={loading}
+            className="bg-green-btn text-white font-medium text-xs px-6 md:px-8 py-2 rounded-md hover:bg-green-dark transition duration-300 disabled:opacity-50"
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </button>
 
-          <Link to="/signuphome
-          ">
-          <button
-            type="button"
-            onClick={() => setIsSignUp(false)}
-             className="bg-[#20B658] border-0 text-white cursor-pointer font-medium text-xs px-4 md:px-8  py-2 rounded-md  border-green-600 hover:bg-green-dark  transition duration-300"
-             >
-            Sign Up
-           
-          </button>
-           </Link>
-
+          <Link to="/signuphome">
+            <button
+              type="button"
+              className="bg-green-btn text-white font-medium text-xs px-6 md:px-8 py-2 rounded-md hover:bg-green-dark transition duration-300"
+            >
+              Sign Up
+            </button>
+          </Link>
         </div>
-      </form> 
+      </form>
     </div>
-  )
-}
+  );
+};
 
-export default SingInput
+export default SignInput;

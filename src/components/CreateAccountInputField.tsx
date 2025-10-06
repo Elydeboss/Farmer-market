@@ -159,7 +159,7 @@ function CreateAccountInputField() {
           { name: "lastName", label: "Last Name", type: "text" },
           { name: "phoneNumber", label: "Phone Number", type: "tel" },
           { name: "email", label: "Email Address", type: "email" },
-          { name: "password", label: "Password", type: "password" },
+          { name: "password", label: "Password", type: "password", span:2 },
           { name: "confirmPassword", label: "Confirm Password", type: "password" },
         ].map((field) => (
           <div key={field.name} className="flex flex-col gap-1">
