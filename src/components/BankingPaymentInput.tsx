@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/arrow-icon.svg";
 
 type FormData = {
@@ -9,6 +9,7 @@ type FormData = {
 };
 
 const BankingPaymentInput = () => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState<FormData>({
     bankName: "",
     accountNumber: "",
@@ -59,7 +60,7 @@ const BankingPaymentInput = () => {
     }
 
     // Passed validation ✅
-    console.log("Form submitted:", formData);
+    navigate("/successpage")
   };
 
   return (

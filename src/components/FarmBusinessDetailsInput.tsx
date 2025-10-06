@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/arrow-icon.svg";
 
 type BDAuth = {
@@ -10,6 +10,8 @@ type BDAuth = {
 };
 
 function BusinessDetails() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<BDAuth>({
     businessName: "",
     businessLocation: "",
@@ -17,46 +19,48 @@ function BusinessDetails() {
     typeProduce: "",
   });
 
-  const [showErr, setShowErr] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.businessName || !formData.businessLocation || !formData.scaleBusiness || !formData.typeProduce) {
-    showInputErr("Please fill in all fields before continuing.");
-    return;
-  }
 
-  // If valid, do something (API, console, etc)
-  console.log("Form submitted:", formData);
+    const { businessName, businessLocation, scaleBusiness, typeProduce } =
+      formData;
 
-  };
-
-    function showInputErr(message: string) { 
-    setShowErr(message);
-    return;
+    if (!businessName || !businessLocation || !scaleBusiness || !typeProduce) {
+      setError("Please fill in all fields before continuing.");
+      return;
     }
 
-  return (
-    
-       <div className="mt-2 md:mt-0  flex flex-col h-full">
+    setError(null);
+    // Later: send API request here
+    navigate("/verifyd");
+  };
 
-        <div className="relative  gap-3 mb-6">
+  return (
+    <div className="mt-2 md:mt-0 flex flex-col h-full">
+      {/* Header */}
+      <div className="relative gap-3 mb-6">
         <Link to="/createaccount">
-        <img src={logo} className="w-6 absolute -left-8 md:-left-10 top-0.5 hover:opacity-50" alt="Back" /> </Link> 
-        <h1 className="  text-green-btn font-bold text-md sm:text-lg"> Farm/Business Details</h1>
+          <img
+            src={logo}
+            className="w-6 absolute -left-8 md:-left-10 top-0.5 hover:opacity-50"
+            alt="Back"
+          />
+        </Link>
+        <h1 className="text-green-btn font-bold text-md sm:text-lg">
+          Farm/Business Details
+        </h1>
       </div>
 
+      {/* Form */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {/* Business Name */}
         <div className="flex flex-col gap-1">
@@ -65,11 +69,12 @@ function BusinessDetails() {
           </label>
           <input
             type="text"
+            id="businessName"
             name="businessName"
             placeholder="Enter Business Name"
-            className="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none cursor-pointer focus:ring-2 focus:ring-green-500"
             value={formData.businessName}
             onChange={handleChange}
+            className="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none cursor-pointer focus:ring-2 focus:ring-green-500"
           />
         </div>
 
@@ -80,10 +85,11 @@ function BusinessDetails() {
           </label>
           <input
             type="text"
+            id="businessLocation"
             name="businessLocation"
             placeholder="Enter Farm/Business Location"
-            onChange={handleChange}
             value={formData.businessLocation}
+            onChange={handleChange}
             className="w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none cursor-pointer focus:ring-2 focus:ring-green-500"
           />
         </div>
@@ -126,14 +132,15 @@ function BusinessDetails() {
           </select>
         </div>
 
-        {showErr && (
-          <p className="text-red-500 text-sm text-center">{showErr}</p>
+        {/* Error */}
+        {error && (
+          <p className="text-red-500 text-sm text-center">{error}</p>
         )}
 
         {/* Submit */}
         <button
           type="submit"
-          className="bg-green-btn text-white  border-0 md:w-[300px] md:mx-auto py-2 rounded-md hover:text-white hover:bg-green-dark transition-colors mt-4 cursor-pointer"
+          className="bg-green-btn text-white md:w-[300px] md:mx-auto py-2 rounded-md hover:bg-green-dark transition-colors mt-4 cursor-pointer"
         >
           Continue
         </button>

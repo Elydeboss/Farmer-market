@@ -1,7 +1,9 @@
 import React from "react";
 import logo from "../assets/verified.png";
+import { useNavigate } from "react-router-dom";
 
 const SuccessPage: React.FC = () => {
+  const navDashboard = useNavigate()
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white rounded-xl shadow-md p-8 sm:p-10 max-w-md w-full text-center">
@@ -25,8 +27,8 @@ const SuccessPage: React.FC = () => {
         <button
           className="bg-green-btn hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-green-dark focus:ring-opacity-50 text-white font-medium py-2 px-6 rounded-md transition duration-200 cursor-pointer"
           onClick={() => {
-            // Add your navigation logic here (e.g., using react-router)
-            console.log("Redirecting to dashboard...");
+          
+            navDashboard('/buyerdashboard')
           }}
         >
           Continue to Dashboard
