@@ -2,7 +2,11 @@ import React from "react";
 import logo from "../assets/verified.png";
 import { useNavigate } from "react-router-dom";
 
-const SuccessPage: React.FC = () => {
+interface Props {
+  link:string
+}
+
+const SuccessPage: React.FC<Props> = ({link}) => {
   const navDashboard = useNavigate()
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -28,7 +32,7 @@ const SuccessPage: React.FC = () => {
           className="bg-green-btn hover:bg-green-dark focus:outline-none focus:ring-2 focus:ring-green-dark focus:ring-opacity-50 text-white font-medium py-2 px-6 rounded-md transition duration-200 cursor-pointer"
           onClick={() => {
           
-            navDashboard('/buyerdashboard')
+            navDashboard(`${link}`)
           }}
         >
           Continue to Dashboard

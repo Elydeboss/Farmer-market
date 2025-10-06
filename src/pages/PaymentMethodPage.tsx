@@ -61,7 +61,7 @@ const PaymentMethodPage = () => {
                   placeholder="Card Number"
                   value={cardNumber}
                   onChange={(e) => setCardNumber(e.target.value)}
-                  className="w-full border-1 border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
+                  className="w-full text-base border-1 border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
                 />
                 <div className="flex gap-3">
                   <input
@@ -69,14 +69,14 @@ const PaymentMethodPage = () => {
                     placeholder="MM/YY"
                     value={expiry}
                     onChange={(e) => setExpiry(e.target.value)}
-                    className="w-1/2 border-1 border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
+                    className="w-1/2 text-base border-1 border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
                   />
                   <input
                     type="text"
                     placeholder="CVV"
                     value={cvv}
                     onChange={(e) => setCvv(e.target.value)}
-                    className="w-1/2 border border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
+                    className="w-1/2 text-base border border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
                   />
                 </div>
               </div>

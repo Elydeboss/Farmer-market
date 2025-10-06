@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import logo from "../assets/arrow-icon.svg";
+import { Eye, EyeOff } from "lucide-react";
+import backIcon from "../assets/arrow-icon.svg";
 
 type AuthCredentials = {
   email: string;
@@ -16,28 +17,26 @@ const SignInput = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  // handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // show timed error
   const showError = (message: string) => {
     setError(message);
     setTimeout(() => setError(null), 5000);
   };
 
-  // show timed success
   const showSuccess = (message: string) => {
     setSuccess(message);
     setTimeout(() => setSuccess(null), 5000);
   };
 
-  // handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -58,17 +57,11 @@ const SignInput = () => {
       );
 
       const data = response.data;
-
-      // Save token
       localStorage.setItem("token", data.token);
-
       showSuccess("Signed in successfully!");
       console.log("User logged in:", data);
 
-      // Navigate to dashboard
       navigate("/buyerdashboard");
-
-      // Reset form
       setFormData({ email: "", password: "" });
     } catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response) {
@@ -81,79 +74,109 @@ const SignInput = () => {
     }
   };
 
+  
   return (
     <div className="mt-8 md:mt-0 flex flex-col h-full">
       {/* Header */}
-      <div className="relative mb-6">
-        <Link to="/">
-          <img
-            src={logo}
-            className="w-6 absolute -left-8 md:-left-10 top-0.5 hover:opacity-50"
-            alt="Back"
-          />
+      <div className="relative mb-8 flex items-center">
+        <Link
+          to="/"
+          className="absolute -left-8 md:-left-10 hover:opacity-70 transition"
+        >
+          <img src={backIcon} className="w-6" alt="Back" />
         </Link>
-        <h1 className="text-green-btn font-bold text-md sm:text-lg">
-          Sign In to your Account
+        <h1 className="text-green-btn font-bold text-lg sm:text-xl text-center w-full">
+          Sign in to your Account
         </h1>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         {/* Email */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="font-medium">
+          <label htmlFor="email" className="font-medium text-gray-700">
             Email Address
           </label>
           <input
             id="email"
             type="email"
             name="email"
-            placeholder="Enter Email Address"
+            placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition"
           />
         </div>
 
         {/* Password */}
         <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="font-medium">
+          <label htmlFor="password" className="font-medium text-gray-700">
             Password
           </label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Enter Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-2 text-gray-500 hover:text-gray-700 transition"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          {/* Forgot Password*/}
+           <div className="text-right mt-2">
+           <Link to='/forgot'>  <button
+              type="button"
+              className="text-sm text-green-btn font-medium hover:text-green-700 transition-colors duration-200 disabled:opacity-50"
+            >
+              {forgotLoading ? "Sending link..." : "Forgot your password?"}
+            </button>
+            </Link>
+          </div> 
+
         </div>
 
         {/* Feedback messages */}
-        {error && <div className="text-red-600 text-sm">{error}</div>}
-        {success && <div className="text-green-600 text-sm">{success}</div>}
+        {error && (
+          <div className="text-red-600 text-sm bg-red-50 p-2 rounded-md border border-red-200">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div className="text-green-700 text-sm bg-green-50 p-2 rounded-md border border-green-200">
+            {success}
+          </div>
+        )}
 
-        {/* Buttons */}
-        <div className="flex flex-row gap-3 pt-3">
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-green-btn text-white font-medium text-xs px-6 md:px-8 py-2 rounded-md hover:bg-green-dark transition duration-300 disabled:opacity-50"
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-green-btn text-white font-medium text-sm px-6 py-2.5 rounded-md hover:bg-green-dark transition duration-300 disabled:opacity-60"
+        >
+          {loading ? "Signing in..." : "Sign In"}
+        </button>
+
+        {/* Signup Text */}
+        <p className="text-center text-sm text-gray-600 mt-3">
+          Dont have an account?{" "}
+          <Link
+            to="/signuphome"
+            className="text-green-btn font-medium hover:text-green-700 transition-colors"
           >
-            {loading ? "Signing in..." : "Sign In"}
-          </button>
-
-          <Link to="/signuphome">
-            <button
-              type="button"
-              className="bg-green-btn text-white font-medium text-xs px-6 md:px-8 py-2 rounded-md hover:bg-green-dark transition duration-300"
-            >
-              Sign Up
-            </button>
+            Sign Up
           </Link>
-        </div>
+        </p>
       </form>
     </div>
   );

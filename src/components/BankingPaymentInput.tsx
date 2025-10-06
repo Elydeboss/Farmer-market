@@ -59,8 +59,8 @@ const BankingPaymentInput = () => {
       return;
     }
 
-    // Passed validation ✅
-    navigate("/successpage")
+    // Passed validation 
+    navigate("/successpagefarmer")
   };
 
   return (

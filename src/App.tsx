@@ -1,6 +1,5 @@
 // App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import Home from "./pages/Home"; // you already have this
 import Signup from "./pages/BuyerReg";
 import Dashboard from "../src/pages/Farmerdashboard";
@@ -59,6 +58,12 @@ function App() {
           <Route path="overview" element={<Overview />} />
         </Route>
 
+        <Route path="/admindashboard" element={<Admindashboard />}>
+          <Route index element={<UserVerification />} />
+          <Route path="userverification" element={<UserVerification />} />
+          <Route path="dispute" element={<Dispute />} />
+        </Route>
+
         <Route path="/cartpage" element={<CartPage />} />
         <Route path="/marketplace" element={<Marketplace />} />
         <Route path="/wallet" element={<WalletPage />} />
@@ -76,6 +81,7 @@ function App() {
         <Route path="bankingpayment" element={<BankingPayment />} />
         <Route path="farmer" element={<Dashboard />} />
         <Route path="signin" element={<SignPage />} />
+        <Route path="forgot" element={<ForgotPassword /> } />
         <Route path="buyerreg" element={<BuyerReg />} />
         <Route path="verificationcode" element={<VerificationCode />} />
         <Route path="successpage" element={<SuccessPage />} />

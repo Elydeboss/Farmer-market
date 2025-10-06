@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import bgImage from "../assets/woman-farm.png";
 import logo from "../assets/Logo 2.png";
 import backIcon from "../assets/arrow-icon.svg";
-import { Eye, EyeOff } from "lucide-react"; // 👁 password toggle
+import { Eye, EyeOff } from "lucide-react";
 import { useFarmerContext } from "../context/FarmerContext";
 
 const BuyerReg: React.FC = () => {
@@ -28,10 +28,18 @@ const BuyerReg: React.FC = () => {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [showPassword, setShowPassword] = useState(false); // 👁 toggle
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // 👁 toggle
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Handle input changes
+  // auto-dismiss toast
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  // handle input changes
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -40,16 +48,20 @@ const BuyerReg: React.FC = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-
-    // clear field-specific error when user types
     setFieldErrors((prev) => ({ ...prev, [name]: "" }));
-    if (message) setMessage(""); // clear global messages as user types
+    if (message) setMessage("");
   };
 
-  // Validation
+  // password strength
+  const getPasswordStrength = (password: string) => {
+    if (password.length < 6) return "Weak";
+    if (/[A-Z]/.test(password) && /\d/.test(password)) return "Strong";
+    return "Medium";
+  };
+
+  // validation
   const validateForm = () => {
     const errors: Record<string, string> = {};
-
     if (!form.fullName.trim()) errors.fullName = "Full name is required";
     if (!/^\d{10,15}$/.test(form.phoneNumber))
       errors.phoneNumber = "Enter a valid phone number (10-15 digits)";
@@ -70,7 +82,18 @@ const BuyerReg: React.FC = () => {
     }
   };
 
-  // Submit form
+  // form validity
+  const isFormValid =
+    form.fullName &&
+    /^\d{10,15}$/.test(form.phoneNumber) &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) &&
+    form.password.length >= 6 &&
+    form.password === form.confirmPassword &&
+    form.state &&
+    form.lga &&
+    form.agreeToTerms;
+
+  // submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -79,7 +102,6 @@ const BuyerReg: React.FC = () => {
 
     try {
       validateForm();
-
       const payload = {
         fullName: form.fullName,
         phoneNumber: form.phoneNumber,
@@ -88,36 +110,28 @@ const BuyerReg: React.FC = () => {
         confirmPassword: form.confirmPassword,
         agreeToTerms: form.agreeToTerms,
       };
-
       const res = await axios.post(
         "http://localhost:3500/api/users/register/buyer",
         payload,
         { headers: { "Content-Type": "application/json" } }
       );
-
       setMessage(res.data.message || "Account created successfully 🎉");
       setPhone(form.phoneNumber);
-
-      setTimeout(() => {
-        navigate("/verificationcode");
-      }, 1500);
+      setTimeout(() => navigate("/verificationcode"), 1500);
     } catch (error: any) {
-      console.error("Registration Error:", error);
-
       if (axios.isAxiosError(error)) {
         if (error.response) {
           setMessage(error.response.data?.message || "Server error occurred");
         } else if (error.request) {
-          setMessage("No response from server. Please check your connection.");
+          setMessage("No response from server. Check your connection.");
         } else {
-          setMessage("Error setting up request. Please try again.");
+          setMessage("Error setting up request. Try again.");
         }
       } else if (error instanceof Error) {
         setMessage(error.message);
       } else {
         setMessage("Unexpected error. Please try again.");
       }
-
       setIsError(true);
     } finally {
       setLoading(false);
@@ -131,15 +145,9 @@ const BuyerReg: React.FC = () => {
         className="relative h-60 md:h-auto bg-cover bg-center p-6 text-white"
         style={{ backgroundImage: `url(${bgImage})` }}
       >
-        <img
-          src={logo}
-          alt="FarmMarket Logo"
-          className="w-40 sm:w-32 md:w-36 object-contain mt-2"
-        />
+        <img src={logo} alt="FarmMarket Logo" className="w-40 md:w-36 mt-2" />
         <div className="mt-6">
-          <h1 className="text-2xl md:text-4xl font-bold mb-2">
-            Hello, Welcome!
-          </h1>
+          <h1 className="text-2xl md:text-4xl font-bold mb-2">Hello, Welcome!</h1>
           <p className="text-sm md:text-base font-light">
             Please create your verified buyer account to continue.
           </p>
@@ -155,41 +163,22 @@ const BuyerReg: React.FC = () => {
               <img
                 src={backIcon}
                 alt="Back"
-                className="w-6 absolute -left-8 md:-left-10 top-1 hover:opacity-50 transition"
+                className="w-6 absolute -left-8 md:-left-10 top-1 hover:opacity-50"
               />
             </Link>
-            <h2 className="text-green-btn text-xl sm:text-2xl font-bold ml-4 md:ml-6">
+            <h2 className="text-green-btn text-xl sm:text-2xl font-bold ml-6">
               Create Buyer Account
             </h2>
           </div>
 
           {/* Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm"
-          >
-            {/* Normal Inputs */}
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            {/* Full Name, Phone, Email */}
             {[
-              {
-                label: "Full Name",
-                name: "fullName",
-                type: "text",
-                span: 2,
-                placeholder: "Enter your full name",
-              },
-              {
-                label: "Phone Number",
-                name: "phoneNumber",
-                type: "tel",
-                placeholder: "Enter your phone number",
-              },
-              {
-                label: "Email",
-                name: "email",
-                type: "email",
-                placeholder: "Enter your email address",
-              },
-            ].map(({ label, name, type, span, placeholder }) => (
+              { label: "Full Name", name: "fullName", type: "text", span: 2 },
+              { label: "Phone Number", name: "phoneNumber", type: "tel" },
+              { label: "Email", name: "email", type: "email" },
+            ].map(({ label, name, type, span }) => (
               <div key={name} className={span === 2 ? "sm:col-span-2" : ""}>
                 <label className="block text-sm font-medium">{label}</label>
                 <input
@@ -197,23 +186,18 @@ const BuyerReg: React.FC = () => {
                   name={name}
                   value={(form as any)[name]}
                   onChange={handleChange}
-                  required
-                  placeholder={placeholder}
-                  className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 ${
-                    fieldErrors[name]
-                      ? "border-red-500 focus:ring-red-400"
-                      : "focus:ring-green-btn"
-                  } transition text-sm`}
+                  placeholder={`Enter your ${label.toLowerCase()}`}
+                  className={`w-full mt-1 p-2 border rounded-md focus:ring-2 ${
+                    fieldErrors[name] ? "border-red-500 focus:ring-red-400" : "focus:ring-green-btn"
+                  }`}
                 />
                 {fieldErrors[name] && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {fieldErrors[name]}
-                  </p>
+                  <p className="text-red-500 text-xs mt-1">{fieldErrors[name]}</p>
                 )}
               </div>
             ))}
 
-            {/* Password with show/hide 👁 */}
+            {/* Password */}
             <div className="sm:col-span-2 relative">
               <label className="block text-sm font-medium">Password</label>
               <input
@@ -221,29 +205,34 @@ const BuyerReg: React.FC = () => {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                required
                 placeholder="Create a password"
-                className={`w-full mt-1 p-2 border rounded-md pr-10 focus:outline-none focus:ring-2 ${
-                  fieldErrors.password
-                    ? "border-red-500 focus:ring-red-400"
-                    : "focus:ring-green-btn"
-                } transition text-sm`}
+                className={`w-full mt-1 p-2 border rounded-md pr-10 focus:ring-2 ${
+                  fieldErrors.password ? "border-red-500 focus:ring-red-400" : "focus:ring-green-btn"
+                }`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-9 text-gray-500"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
-              {fieldErrors.password && (
-                <p className="text-red-500 text-xs mt-1">
-                  {fieldErrors.password}
+              {form.password && (
+                <p
+                  className={`text-xs mt-1 ${
+                    getPasswordStrength(form.password) === "Strong"
+                      ? "text-green-600"
+                      : getPasswordStrength(form.password) === "Medium"
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  Password strength: {getPasswordStrength(form.password)}
                 </p>
               )}
             </div>
 
-            {/* Confirm Password with show/hide 👁 */}
+            {/* Confirm Password */}
             <div className="sm:col-span-2 relative">
               <label className="block text-sm font-medium">Confirm Password</label>
               <input
@@ -251,26 +240,18 @@ const BuyerReg: React.FC = () => {
                 name="confirmPassword"
                 value={form.confirmPassword}
                 onChange={handleChange}
-                required
                 placeholder="Re-enter your password"
-                className={`w-full mt-1 p-2 border rounded-md pr-10 focus:outline-none focus:ring-2 ${
-                  fieldErrors.confirmPassword
-                    ? "border-red-500 focus:ring-red-400"
-                    : "focus:ring-green-btn"
-                } transition text-sm`}
+                className={`w-full mt-1 p-2 border rounded-md pr-10 focus:ring-2 ${
+                  fieldErrors.confirmPassword ? "border-red-500 focus:ring-red-400" : "focus:ring-green-btn"
+                }`}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+                className="absolute right-3 top-9 text-gray-500"
               >
                 {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
-              {fieldErrors.confirmPassword && (
-                <p className="text-red-500 text-xs mt-1">
-                  {fieldErrors.confirmPassword}
-                </p>
-              )}
             </div>
 
             {/* State & LGA */}
@@ -280,47 +261,32 @@ const BuyerReg: React.FC = () => {
                 name="state"
                 value={form.state}
                 onChange={handleChange}
-                required
-                className={`w-full mt-1 p-2 border rounded-md text-gray-600 text-sm focus:outline-none focus:ring-2 ${
-                  fieldErrors.state
-                    ? "border-red-500 focus:ring-red-400"
-                    : "focus:ring-green-btn"
+                className={`w-full mt-1 p-2 border rounded-md focus:ring-2 ${
+                  fieldErrors.state ? "border-red-500 focus:ring-red-400" : "focus:ring-green-btn"
                 }`}
               >
                 <option value="">Select State</option>
                 <option value="lagos">Lagos</option>
                 <option value="abuja">Abuja</option>
               </select>
-              {fieldErrors.state && (
-                <p className="text-red-500 text-xs mt-1">
-                  {fieldErrors.state}
-                </p>
-              )}
             </div>
-
             <div>
               <label className="block text-sm font-medium">LGA</label>
               <select
                 name="lga"
                 value={form.lga}
                 onChange={handleChange}
-                required
-                className={`w-full mt-1 p-2 border rounded-md text-gray-600 text-sm focus:outline-none focus:ring-2 ${
-                  fieldErrors.lga
-                    ? "border-red-500 focus:ring-red-400"
-                    : "focus:ring-green-btn"
+                className={`w-full mt-1 p-2 border rounded-md focus:ring-2 ${
+                  fieldErrors.lga ? "border-red-500 focus:ring-red-400" : "focus:ring-green-btn"
                 }`}
               >
                 <option value="">Select LGA</option>
                 <option value="ikeja">Ikeja</option>
                 <option value="garki">Garki</option>
               </select>
-              {fieldErrors.lga && (
-                <p className="text-red-500 text-xs mt-1">{fieldErrors.lga}</p>
-              )}
             </div>
 
-            {/* Optional Fields */}
+            {/* Business Fields */}
             <div>
               <label className="block text-sm font-medium">
                 Business Name <span className="text-gray-400">(optional)</span>
@@ -331,10 +297,9 @@ const BuyerReg: React.FC = () => {
                 value={form.businessName}
                 onChange={handleChange}
                 placeholder="Enter your business name"
-                className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-btn text-sm"
+                className="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-green-btn"
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium">
                 Business Type <span className="text-gray-400">(optional)</span>
@@ -345,7 +310,7 @@ const BuyerReg: React.FC = () => {
                 value={form.businessType}
                 onChange={handleChange}
                 placeholder="Enter your business type"
-                className="w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-btn text-sm"
+                className="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-green-btn"
               />
             </div>
 
@@ -359,40 +324,69 @@ const BuyerReg: React.FC = () => {
                 className="w-4 h-4 border-gray-300 rounded focus:ring-green-btn"
               />
               <label className="text-sm text-gray-700">
-                I agree to FarmMarket Terms & Conditions and privacy Policy
-               
+                I agree to{" "}
+                <a href="/terms" target="_blank" className="text-green-btn underline">
+                  Terms & Conditions
+                </a>{" "}
+                and{" "}
+                <a href="/privacy" target="_blank" className="text-green-btn underline">
+                  Privacy Policy
+                </a>
               </label>
             </div>
-            {fieldErrors.agreeToTerms && (
-              <p className="text-red-500 text-xs sm:col-span-2">
-                {fieldErrors.agreeToTerms}
-              </p>
-            )}
 
             {/* Submit */}
             <div className="sm:col-span-2 mt-4">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !isFormValid}
                 className={`w-full py-2.5 rounded-md font-medium text-white transition ${
-                  loading
-                    ? "bg-gray-400 cursor-not-allowed"
+                  loading || !isFormValid
+                    ? "bg-gray-300 cursor-not-allowed"
                     : "bg-green-btn hover:bg-green-dark"
                 }`}
               >
-                {loading ? "Registering..." : "Register"}
+                {loading ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <svg
+                      className="animate-spin h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      ></path>
+                    </svg>
+                    <span>Registering...</span>
+                  </div>
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
 
-            {/* Feedback Message */}
+            {/* Feedback Toast */}
             {message && (
-              <p
-                className={`sm:col-span-2 text-center text-sm mt-3 ${
-                  isError ? "text-red-600" : "text-green-600"
+              <div
+                className={`sm:col-span-2 mt-3 px-4 py-2 rounded-md text-center text-sm transition ${
+                  isError
+                    ? "bg-red-100 text-red-600 border border-red-300"
+                    : "bg-green-100 text-green-700 border border-green-300"
                 }`}
               >
                 {message}
-              </p>
+              </div>
             )}
           </form>
         </div>
