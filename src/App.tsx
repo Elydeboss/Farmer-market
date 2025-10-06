@@ -29,6 +29,9 @@ import Withdrawal from "./pages/WithdrawalPage";
 import OrderTracking from "./pages/OrderTracking";
 import PaymentMethod from "./pages/PaymentMethodPage";
 import BuyerPaymentAcceptance from "./pages/BuyerPaymentAcceptancePage";
+import Admindashboard from "./pages/Admindashboard";
+import UserVerification from "./components/admin/UserVerification";
+import Dispute from "./components/admin/Dispute";
 
 // Example extra pages (create About.jsx, NotFound.jsx later)
 //function About() {
@@ -57,6 +60,12 @@ function App() {
         <Route path="/buyerdashboard" element={<BuyerDashboard />}>
           <Route index element={<Overview />} />
           <Route path="overview" element={<Overview />} />
+        </Route>
+
+        <Route path="/admindashboard" element={<Admindashboard />}>
+          <Route index element={<UserVerification />} />
+          <Route path="userverification" element={<UserVerification />} />
+          <Route path="dispute" element={<Dispute />} />
         </Route>
 
         <Route path="/cartpage" element={<CartPage />} />
