@@ -1,39 +1,37 @@
 import { useState, useRef } from "react";
-import logo from "../assets/Asset 2.png";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/Asset 2.png";
 import { useFarmerContext } from "../context/FarmerContext";
 
 const VerificationCode = () => {
-  const {phone} = useFarmerContext()
-  const navigateCancel = useNavigate();
-  const navigateVerify = useNavigate()
+  const { phone } = useFarmerContext();
+  const navigate = useNavigate();
+
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
-  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
-  const [active, setActive] = useState("verify");
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+  const [active, setActive] = useState<"verify" | "cancel">("verify");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Handle input change
+  // Handle input change (only digits)
   const handleChange = (value: string, index: number) => {
     if (/^[0-9]?$/.test(value)) {
       const newCode = [...code];
       newCode[index] = value;
       setCode(newCode);
 
-      if (value && index < code.length - 1) {
-        inputsRef.current[index + 1]?.focus();
+      // Move focus to next input
+      if (value && index < 5) {
+        inputRefs.current[index + 1]?.focus();
       }
     }
   };
 
   // Handle backspace navigation
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-  ) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === "Backspace" && !code[index] && index > 0) {
-      inputsRef.current[index - 1]?.focus();
+      inputRefs.current[index - 1]?.focus();
     }
   };
 
@@ -52,35 +50,33 @@ const VerificationCode = () => {
       setError(null);
       setSuccess(null);
 
-      
-    
+      // Simulated API delay — replace with real verification request
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      setSuccess("");
-    
-       
-        navigateVerify("/successpage");
-  
-
+      setSuccess("Verification successful!");
+      navigate("/successpage");
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Verification failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Cancel button handler
-  const cancelHandle = () => {
+  // Cancel handler
+  const handleCancel = () => {
     setActive("cancel");
-    navigateCancel("/buyerreg");
+    navigate("/buyerreg");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="w-full max-w-md text-center">
+    <div className="flex items-center justify-center min-h-screen px-4 bg-light">
+      <div className="w-full max-w-md text-center bg-white shadow-md rounded-2xl p-8">
+        {/* Logo */}
         <div className="flex justify-center mb-6">
-          <img src={logo} className="h-10 md:h-14 object-contain" />
+          <img src={logo} alt="Logo" className="h-10 md:h-14 object-contain" />
         </div>
 
+        {/* Header */}
         <h1 className="text-2xl md:text-3xl font-bold text-green-btn mb-2">
           Enter Verification Code
         </h1>
@@ -89,17 +85,18 @@ const VerificationCode = () => {
           <span className="font-medium">+234 {phone}</span>
         </p>
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col items-center gap-6"
-        >
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="flex flex-col items-center gap-6">
           {/* Code Inputs */}
           <div className="flex gap-3 justify-center">
             {code.map((digit, index) => (
               <input
                 key={index}
-                ref={(el) => (inputsRef.current[index] = el)}
+                ref={(el) => {
+                  if (el) inputRefs.current[index] = el;
+                }}
                 type="text"
+                inputMode="numeric"
                 maxLength={1}
                 value={digit}
                 onChange={(e) => handleChange(e.target.value, index)}
@@ -109,9 +106,9 @@ const VerificationCode = () => {
             ))}
           </div>
 
-          {/* Resend code */}
+          {/* Resend Code */}
           <p className="text-gray-600 text-sm">
-            Didn't get a code?{" "}
+            Did'nt get a code?{" "}
             <button
               type="button"
               onClick={() => console.log("Code resent")}
@@ -121,15 +118,15 @@ const VerificationCode = () => {
             </button>
           </p>
 
-          {/* Error / Success messages */}
+          {/* Feedback Messages */}
           {error && <p className="text-red-600 text-sm">{error}</p>}
           {success && <p className="text-green-600 text-sm">{success}</p>}
 
-          {/* Action buttons */}
+          {/* Buttons */}
           <div className="flex gap-4 mt-4 w-full justify-center">
             <button
               type="button"
-              onClick={cancelHandle}
+              onClick={handleCancel}
               className={`px-10 py-1 rounded-md border-2 border-green-btn font-medium shadow transition ${
                 active === "cancel"
                   ? "bg-green-btn text-white"

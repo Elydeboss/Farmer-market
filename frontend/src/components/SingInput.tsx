@@ -18,7 +18,7 @@ const SignInput = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [forgotLoading, setForgotLoading] = useState(false);
+  
 
   const navigate = useNavigate();
 
@@ -139,7 +139,6 @@ const SignInput = () => {
               type="button"
               className="text-sm text-green-btn font-medium hover:text-green-700 transition-colors duration-200 disabled:opacity-50"
             >
-              {forgotLoading ? "Sending link..." : "Forgot your password?"}
             </button>
             </Link>
           </div> 
