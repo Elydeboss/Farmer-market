@@ -1,19 +1,21 @@
 {
   "name": "agrolink_backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Agrolink backend API built with Express and TypeScript",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "seed": "ts-node src/seedAdmin.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/index.js"
   },
-  "keywords": [],
+  "keywords": ["express", "typescript", "backend", "agrolink"],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",

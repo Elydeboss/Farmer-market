@@ -69,6 +69,12 @@ function App() {
           <Route path="dispute" element={<Dispute />} />
         </Route>
 
+        <Route path="/admindashboard" element={<Admindashboard />}>
+          <Route index element={<UserVerification />} />
+          <Route path="userverification" element={<UserVerification />} />
+          <Route path="dispute" element={<Dispute />} />
+        </Route>
+
         <Route path="/cartpage" element={<CartPage />} />
         <Route path="/marketplace" element={<Marketplace />} />
         <Route path="/wallet" element={<WalletPage />} />
@@ -84,21 +90,13 @@ function App() {
         <Route path="/upload" element={<Upload />} />
         <Route path="verifyd" element={<VerificationDetails />} />
         <Route path="bankingpayment" element={<BankingPayment />} />
-        <Route path="/farmer" element={<Dashboard />} />
-        <Route path="/signin" element={<SignPage />} />
-        <Route path="/buyerreg" element={<BuyerReg />} />
-        <Route path="/verificationcode" element={<VerificationCode />} />
-        <Route path="/successpage" element={<SuccessPage />} />
-        <Route path="/ordertracking" element={<OrderTracking />} />
-        <Route path="/verifyd" element={<VerificationDetails />} />
-        <Route path="/bankingpayment" element={<BankingPayment />} />
-        <Route path="/farmer" element={<Dashboard />} />
-        <Route path="/signin" element={<SignPage />} />
-        <Route path="/buyerreg" element={<BuyerReg />} />
-        <Route path="/verificationcode" element={<VerificationCode />} />
-        <Route path="/successpage" element={<SuccessPage />} />
-        <Route path="/ordertracking" element={<OrderTracking />} />
-        <Route path="/about" element={<About />} />
+        <Route path="farmer" element={<Dashboard />} />
+        <Route path="signin" element={<SignPage />} />
+        <Route path="forgot" element={<ForgotPassword />} />
+        <Route path="buyerreg" element={<BuyerReg />} />
+        <Route path="verificationcode" element={<VerificationCode />} />
+        <Route path="successpage" element={<SuccessPage />} />
+        <Route path="ordertracking" element={<OrderTracking />} />
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />

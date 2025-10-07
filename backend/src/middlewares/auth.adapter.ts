@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-/** Roles used across the app */
 type Role = "farmer" | "buyer" | "logistics" | "admin";
 
 declare global {
@@ -13,7 +12,6 @@ declare global {
       _id?: string;
       role: Role;
       isVerified?: boolean;
-      // add extras if needed later
     }
 
     interface Request {
@@ -22,20 +20,28 @@ declare global {
   }
 }
 
-// Determine whether to use the stub middleware
 const USE_STUB = process.env.USE_AUTH_STUB === "true";
 
-let authMiddlewareReal: (req: Request, res: Response, next: NextFunction) => void;
-let authorizeRolesReal: (...roles: Role[]) => (req: Request, res: Response, next: NextFunction) => void;
+// Declare with safe defaults
+let authMiddlewareReal:
+  | ((req: Request, res: Response, next: NextFunction) => void)
+  | undefined;
+let authorizeRolesReal:
+  | ((...roles: Role[]) => (req: Request, res: Response, next: NextFunction) => void)
+  | undefined;
 
+// Load real middleware only if USE_STUB is false
 if (!USE_STUB) {
-  // Use real middleware (ensure the path is correct relative to this file)
-  const mod = require("./auth.middleware");
-  authMiddlewareReal = mod.authMiddleware;
-  authorizeRolesReal = mod.authorizeRoles;
+  try {
+    const mod = require("./auth.middleware");
+    authMiddlewareReal = mod.authMiddleware;
+    authorizeRolesReal = mod.authorizeRoles;
+  } catch (err) {
+    console.error("⚠️ Failed to load real auth middleware:", err);
+  }
 }
 
-/** Stub auth middleware for local testing (when USE_AUTH_STUB=true) */
+/** Stub auth middleware for local testing */
 function authMiddlewareStub(req: Request, res: Response, next: NextFunction) {
   const raw = req.header("x-dev-user");
   if (!raw) {
@@ -62,5 +68,11 @@ function authorizeRolesStub(...roles: Role[]) {
   };
 }
 
-export const authMiddleware = USE_STUB ? authMiddlewareStub : authMiddlewareReal;
-export const authorizeRoles = USE_STUB ? authorizeRolesStub : authorizeRolesReal;
+// ✅ Fix: only export assigned functions safely
+export const authMiddleware = USE_STUB
+  ? authMiddlewareStub
+  : (authMiddlewareReal ?? authMiddlewareStub);
+
+export const authorizeRoles = USE_STUB
+  ? authorizeRolesStub
+  : (authorizeRolesReal ?? authorizeRolesStub);
