@@ -7,7 +7,7 @@ const BuyerPaymentAcceptancePage = () => {
   return (
     <div>
       {/* HEADER */}
-      <header className="bg-pri font-dm-sans sticy top-0 left-0 text-white">
+      <header className="bg-pri font-dm-sans sticky top-0 left-0 text-white">
         <div className="max-w-[1100px]  mx-auto px-4 py-4 sm:py-6 md:py-6 flex items-center justify-between">
           {/* LOGO */}
           <div className="w-[150px] md:w-[180px] ">

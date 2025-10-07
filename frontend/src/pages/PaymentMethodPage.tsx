@@ -2,7 +2,7 @@ import { useState } from "react";
 import Logo from "../assets/Logo-black.svg";
 import Mastercard from "../assets/Mastercard.svg";
 import Visa from "../assets/Visa.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CreditCard, Landmark, ArrowRight } from "lucide-react";
 
 const PaymentMethodPage = () => {
@@ -10,16 +10,18 @@ const PaymentMethodPage = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
+  const navigate = useNavigate();
 
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Payment processed successfully!");
+    // Redirect to a payment success page
+    navigate("/payment-success");
   };
 
   return (
     <div className="max-w-[1000px]  mx-auto px-6 py-5 sm:py-6 md:py-6">
       {/* HEADER */}
-      <header className="font-dm-sans sticy top-0 left-0 text-white">
+      <header className="font-dm-sans sticky top-0 left-0 text-white">
         <div className="w-[150px] md:w-[180px] ">
           <NavLink to="/">
             <img src={Logo} alt="Logo" className="cursor-pointer" />
@@ -59,9 +61,9 @@ const PaymentMethodPage = () => {
                 <input
                   type="text"
                   placeholder="Card Number"
-                  value={cardNumber}
+                  className="w-full border border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
                   onChange={(e) => setCardNumber(e.target.value)}
-                  className="w-full text-base border-1 border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
+                  className="w-full border-1 border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
                 />
                 <div className="flex gap-3">
                   <input
@@ -69,14 +71,14 @@ const PaymentMethodPage = () => {
                     placeholder="MM/YY"
                     value={expiry}
                     onChange={(e) => setExpiry(e.target.value)}
-                    className="w-1/2 text-base border-1 border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
+                    className="w-1/2 border-1 border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
                   />
                   <input
                     type="text"
                     placeholder="CVV"
                     value={cvv}
                     onChange={(e) => setCvv(e.target.value)}
-                    className="w-1/2 text-base border border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
+                    className="w-1/2 border border-pri rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-pri"
                   />
                 </div>
               </div>
@@ -117,7 +119,7 @@ const PaymentMethodPage = () => {
               type="submit"
               className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition"
             >
-              Make Payment        
+              Make Payment
             </button>
           </div>
         </form>
