@@ -84,15 +84,21 @@ function App() {
         <Route path="/upload" element={<Upload />} />
         <Route path="verifyd" element={<VerificationDetails />} />
         <Route path="bankingpayment" element={<BankingPayment />} />
-        <Route path="farmer" element={<Dashboard />} />
+        <Route path="/farmer" element={<Dashboard />} />
         <Route path="signin" element={<SignPage />} />
-        <Route path="forgot" element={<ForgotPassword /> } />
+        <Route path="forgot" element={<ForgotPassword />} />
         <Route path="buyerreg" element={<BuyerReg />} />
         <Route path="verificationcode" element={<VerificationCode />} />
-        <Route path="successpagefarmer" element={<SuccessPage link="/farmer" />} />
-        <Route path="successpage" element={<SuccessPage link="/buyerdashboard" />} /> 
+        <Route
+          path="successpagefarmer"
+          element={<SuccessPage link="/farmer" />}
+        />
+        <Route
+          path="successpage"
+          element={<SuccessPage link="/buyerdashboard" />}
+        />
         <Route path="ordertracking" element={<OrderTracking />} />
-        <Route path="/otppage" element={ <OtpPage /> } />
+        <Route path="/otppage" element={<OtpPage />} />
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
