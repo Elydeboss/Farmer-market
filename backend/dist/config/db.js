@@ -4,19 +4,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+let isConnected = false; // Track the connection state globally
 const connectDB = async () => {
+    if (isConnected) {
+        // If already connected, skip re-connecting
+        console.log("✅ Using existing MongoDB connection");
+        return;
+    }
     try {
-        await mongoose_1.default.connect(process.env.MONGO_URL);
-        console.log("MongoDB connected");
+        const db = await mongoose_1.default.connect(process.env.MONGO_URL);
+        isConnected = db.connection.readyState === 1; // 1 = connected
+        console.log("🚀 MongoDB connected");
     }
     catch (error) {
         if (error instanceof Error) {
-            console.error("MongoDB connection failed:", error.message);
+            console.error("❌ MongoDB connection failed:", error.message);
         }
         else {
-            console.error("MongoDB connection failed:", error);
+            console.error("❌ MongoDB connection failed:", error);
         }
-        process.exit(1);
+        throw error; // Pass the error up to the route handler
     }
 };
 exports.default = connectDB;
