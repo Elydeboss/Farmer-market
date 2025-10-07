@@ -18,7 +18,7 @@ type TeamMember = {
 
 const TEAM: TeamMember[] = [
   {
-    id: "Team1",
+    id: "Member1",
     name: "Bianca Onovo",
     role: "Product Manager",
     quote:
@@ -26,7 +26,7 @@ const TEAM: TeamMember[] = [
     image: Team1,
   },
   {
-    id: "Team1",
+    id: "Member2",
     name: "Chijoke Maduforo",
     role: "Product Designer",
     quote:
@@ -34,7 +34,7 @@ const TEAM: TeamMember[] = [
     image: Team3,
   },
   {
-    id: "Team1",
+    id: "Member3",
     name: "Oluwadamilola Adesina",
     role: "Backend Engineer",
     quote:
@@ -42,7 +42,7 @@ const TEAM: TeamMember[] = [
     image: Team2,
   },
   {
-    id: "Team1",
+    id: "Member4",
     name: "Peter Yeboah",
     role: "Frontend Engineer",
     quote:

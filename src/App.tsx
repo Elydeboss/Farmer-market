@@ -10,6 +10,7 @@ import "./App.css";
 
 import BuyerDashboard from "./pages/BuyerDashboard";
 import Overview from "./components/dashboard-components/Overview";
+import ForgotPassword from "./pages/ForgotPassword";
 
 import FarmBusinessDetails from "./pages/FarmBusinessDetails";
 import VerificationDetails from "./pages/VerificationDetails";
@@ -97,6 +98,7 @@ function App() {
         <Route path="verificationcode" element={<VerificationCode />} />
         <Route path="successpage" element={<SuccessPage />} />
         <Route path="ordertracking" element={<OrderTracking />} />
+        <Route path="/about" element={<About />} />
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
