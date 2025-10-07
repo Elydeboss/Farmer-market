@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center gap-3">
-          <Link to="/signup2">
+          <Link to="/signupHome">
             <button className="bg-sec border-2 border-sec outline-0 w-28 transition text-black text-sm font-bold py-[11px] px-5 rounded-md hover:bg-sec2 hover:border-sec2">
               Sign Up
             </button>
