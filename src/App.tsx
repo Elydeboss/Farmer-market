@@ -10,6 +10,7 @@ import "./App.css";
 
 import BuyerDashboard from "./pages/BuyerDashboard";
 import Overview from "./components/dashboard-components/Overview";
+import ForgotPassword from "./pages/ForgotPassword";
 
 import FarmBusinessDetails from "./pages/FarmBusinessDetails";
 import VerificationDetails from "./pages/VerificationDetails";
@@ -28,6 +29,11 @@ import Withdrawal from "./pages/WithdrawalPage";
 import OrderTracking from "./pages/OrderTracking";
 import PaymentMethod from "./pages/PaymentMethodPage";
 import BuyerPaymentAcceptance from "./pages/BuyerPaymentAcceptancePage";
+import Admindashboard from "./pages/Admindashboard";
+import UserVerification from "./components/admin/UserVerification";
+import Dispute from "./components/admin/Dispute";
+
+import About from "./pages/About";
 
 // Example extra pages (create About.jsx, NotFound.jsx later)
 //function About() {
@@ -64,6 +70,12 @@ function App() {
           <Route path="dispute" element={<Dispute />} />
         </Route>
 
+        <Route path="/admindashboard" element={<Admindashboard />}>
+          <Route index element={<UserVerification />} />
+          <Route path="userverification" element={<UserVerification />} />
+          <Route path="dispute" element={<Dispute />} />
+        </Route>
+
         <Route path="/cartpage" element={<CartPage />} />
         <Route path="/marketplace" element={<Marketplace />} />
         <Route path="/wallet" element={<WalletPage />} />
@@ -81,11 +93,15 @@ function App() {
         <Route path="bankingpayment" element={<BankingPayment />} />
         <Route path="farmer" element={<Dashboard />} />
         <Route path="signin" element={<SignPage />} />
-        <Route path="forgot" element={<ForgotPassword /> } />
+        <Route path="forgot" element={<ForgotPassword />} />
         <Route path="buyerreg" element={<BuyerReg />} />
         <Route path="verificationcode" element={<VerificationCode />} />
-        <Route path="successpage" element={<SuccessPage />} />
+        <Route
+          path="successpage"
+          element={<SuccessPage link="/buyerdashboard" />}
+        />
         <Route path="ordertracking" element={<OrderTracking />} />
+        <Route path="/about" element={<About />} />
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />

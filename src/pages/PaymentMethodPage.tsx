@@ -2,7 +2,7 @@ import { useState } from "react";
 import Logo from "../assets/Logo-black.svg";
 import Mastercard from "../assets/Mastercard.svg";
 import Visa from "../assets/Visa.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { CreditCard, Landmark, ArrowRight } from "lucide-react";
 
 const PaymentMethodPage = () => {
@@ -113,12 +113,14 @@ const PaymentMethodPage = () => {
 
           {/* PAYMENT BTN */}
           <div className="p-4">
-            <button
-              type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition"
-            >
-              Make Payment        
-            </button>
+            <Link to="/buyerpaymentacceptance">
+              <button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-md transition"
+              >
+                Make Payment
+              </button>
+            </Link>
           </div>
         </form>
       </main>
