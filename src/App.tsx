@@ -96,7 +96,10 @@ function App() {
         <Route path="forgot" element={<ForgotPassword />} />
         <Route path="buyerreg" element={<BuyerReg />} />
         <Route path="verificationcode" element={<VerificationCode />} />
-        <Route path="successpage" element={<SuccessPage />} />
+        <Route
+          path="successpage"
+          element={<SuccessPage link="/buyerdashboard" />}
+        />
         <Route path="ordertracking" element={<OrderTracking />} />
         <Route path="/about" element={<About />} />
 
