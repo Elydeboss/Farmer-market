@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { api } from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import bgImage from "../assets/woman-farm.png";
 import logo from "../assets/Logo 2.png";
@@ -110,8 +111,8 @@ const BuyerReg: React.FC = () => {
         confirmPassword: form.confirmPassword,
         agreeToTerms: form.agreeToTerms,
       };
-      const res = await axios.post(
-        "http://localhost:3500/api/users/register/buyer",
+      const res = await api.post(
+        "/api/users/register/buyer",
         payload,
         { headers: { "Content-Type": "application/json" } }
       );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { api } from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react"; // for password toggle
 import backIcon from "../assets/arrow-icon.svg";
@@ -128,8 +129,8 @@ function CreateAccountInputField() {
     try {
       setLoading(true);
 
-      await axios.post(
-        "http://localhost:3500/api/users/register/farmer",
+      await api.post(
+        "/api/users/register/farmer",
         { ...formData },
         { headers: { "Content-Type": "application/json" } }
       );

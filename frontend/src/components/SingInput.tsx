@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { api } from "../utils/api";
 import { Eye, EyeOff } from "lucide-react";
 import backIcon from "../assets/arrow-icon.svg";
 
@@ -50,8 +51,8 @@ const SignInput = () => {
       setError(null);
       setSuccess(null);
 
-      const response = await axios.post(
-        "http://localhost:3500/api/users/login",
+      const response = await api.post(
+        "/api/users/login",
         formData,
         { headers: { "Content-Type": "application/json" } }
       );

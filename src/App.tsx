@@ -28,6 +28,7 @@ import PaymentDetailsPage from "./pages/PaymentdetailsPage";
 import Withdrawal from "./pages/WithdrawalPage";
 import OrderTracking from "./pages/OrderTracking";
 import PaymentMethod from "./pages/PaymentMethodPage";
+import Contact from "./pages/Contact";
 import BuyerPaymentAcceptance from "./pages/BuyerPaymentAcceptancePage";
 import Admindashboard from "./pages/Admindashboard";
 import UserVerification from "./components/admin/UserVerification";
@@ -100,8 +101,10 @@ function App() {
           path="successpage"
           element={<SuccessPage link="/buyerdashboard" />}
         />
+
         <Route path="ordertracking" element={<OrderTracking />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />

@@ -251,7 +251,7 @@ const About = () => {
 
             {/* CTAS */}
             <div className="flex gap-3">
-              <Link to="">
+              <Link to="/signupHome">
                 <button className="outline-none border border-pri inline-block w-38 bg-pri text-white font-bold px-4 py-2.5 rounded-lg cursor-pointer shadow-sm hover:bg-green-600 transition">
                   Get Started
                 </button>
