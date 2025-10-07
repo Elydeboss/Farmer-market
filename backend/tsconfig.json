@@ -12,6 +12,6 @@
     "noImplicitAny": false,
     "types": ["node", "express"]
   },
-  "include": ["src/**/*.ts", "api/**/*.ts"],
+  "include": ["src/**/*.ts", "src/api/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
