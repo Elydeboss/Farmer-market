@@ -32,6 +32,8 @@ import Admindashboard from "./pages/Admindashboard";
 import UserVerification from "./components/admin/UserVerification";
 import Dispute from "./components/admin/Dispute";
 
+import About from "./pages/About";
+
 // Example extra pages (create About.jsx, NotFound.jsx later)
 //function About() {
 //  return <h2>About Page</h2>;
@@ -82,18 +84,12 @@ function App() {
         <Route path="/upload" element={<Upload />} />
         <Route path="verifyd" element={<VerificationDetails />} />
         <Route path="bankingpayment" element={<BankingPayment />} />
-        <Route path="farmer" element={<Dashboard />} />
-        <Route path="signin" element={<SignPage />} />
-        <Route path="buyerreg" element={<BuyerReg />} />
-        <Route path="verificationcode" element={<VerificationCode />} />
-        <Route path="successpage" element={<SuccessPage />} />
-<<<<<<< HEAD
-        <Route path="buyerreg" element={<BuyerReg />} />
-        <Route path="verificationcode" element={<VerificationCode />} />
-        <Route path="successpage" element={<SuccessPage />} />
-=======
->>>>>>> 24d8a371c984a5c82c5dfe331d74e62c598961d6
-        <Route path="ordertracking" element={<OrderTracking />} />
+        <Route path="/farmer" element={<Dashboard />} />
+        <Route path="/signin" element={<SignPage />} />
+        <Route path="/buyerreg" element={<BuyerReg />} />
+        <Route path="/verificationcode" element={<VerificationCode />} />
+        <Route path="/successpage" element={<SuccessPage />} />
+        <Route path="/ordertracking" element={<OrderTracking />} />
         <Route path="/verifyd" element={<VerificationDetails />} />
         <Route path="/bankingpayment" element={<BankingPayment />} />
         <Route path="/farmer" element={<Dashboard />} />
@@ -102,6 +98,7 @@ function App() {
         <Route path="/verificationcode" element={<VerificationCode />} />
         <Route path="/successpage" element={<SuccessPage />} />
         <Route path="/ordertracking" element={<OrderTracking />} />
+        <Route path="/about" element={<About />} />
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
