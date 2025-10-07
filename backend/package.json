@@ -10,9 +10,7 @@
     "start": "node dist/index.js"
   },
   "keywords": ["express", "typescript", "backend", "agrolink"],
-  "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "engines": {
     "node": ">=18.0.0"
   },
