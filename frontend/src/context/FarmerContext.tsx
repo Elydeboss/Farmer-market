@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
+import React from "react";
 
 // 1. Define the type for your context state
 interface FarmerContextType {
@@ -32,5 +33,7 @@ export const FarmerProvider: React.FC<FarmerProviderProps> = ({ children }) => {
     setPhone,
   };
 
-  return <FarmerContext.Provider value={value}>{children}</FarmerContext.Provider>;
+  return (
+    <FarmerContext.Provider value={value}>{children}</FarmerContext.Provider>
+  );
 };
