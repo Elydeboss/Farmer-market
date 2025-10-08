@@ -27,10 +27,10 @@ const SignupHome: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <div className="relative flex flex-col justify-center items-center sm:items-start h-[calc(100vh-72px)] px-8 md:px-16 gap-12 max-w-3xl">
+      <div className="relative flex flex-col justify-center  sm:items-start h-[calc(100vh-72px)] px-8 md:px-16 gap-12 max-w-3xl">
         <Link to="/">
           <img src={arrow}
-          className="sm:w-10"
+          className=" w-[20px] md:w-10"
            alt="" />
         </Link>
         <h1 className="text-4xl text-center sm:text-left w-full md:text-6xl font-instrument  font-semibold text-white leading-snug tracking-tight">

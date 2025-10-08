@@ -3,7 +3,7 @@ import bgImage from "../assets/Rectangle 28.png";
 import logo from "../assets/Asset 10.png";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import axios from "axios";
+import { api } from "../utils/api";
 
 const SigninPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -19,10 +19,7 @@ const SigninPage = () => {
   setLoading(true);
 
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/login`,
-      form
-    );
+    const response = await api.post(`/api/login`, form);
 
     console.log("Login successful:", response.data);
     // e.g., save token or navigate

@@ -63,11 +63,10 @@ function App() {
           <Route path="overview" element={<Overview />} />
         </Route>
 
-        <Route path="/admindashboard" element={<Admindashboard />}>
-          <Route index element={<UserVerification />} />
-          <Route path="userverification" element={<UserVerification />} />
-          <Route path="dispute" element={<DisputePage />} />
-        </Route>
+        {/*<Route path="/admindashboard" element={<Admindashboard />} />*/}
+        {/**<Route index element={<UserVerification />} />*/}
+        <Route path="/userverification" element={<UserVerification />} />
+        <Route path="/dispute" element={<DisputePage />} />
 
         <Route path="/cartpage" element={<CartPage />} />
         <Route path="/marketplace" element={<Marketplace />} />
@@ -85,10 +84,10 @@ function App() {
         <Route path="verifyd" element={<VerificationDetails />} />
         <Route path="bankingpayment" element={<BankingPayment />} />
         <Route path="/farmer" element={<Dashboard />} />
-        <Route path="signin" element={<SignPage />} />
-        <Route path="forgot" element={<ForgotPassword />} />
-        <Route path="buyerreg" element={<BuyerReg />} />
-        <Route path="verificationcode" element={<VerificationCode />} />
+        <Route path="/signin" element={<SignPage />} />
+        <Route path="/forgot" element={<ForgotPassword />} />
+        <Route path="/buyerreg" element={<BuyerReg />} />
+        <Route path="/verificationcode" element={<VerificationCode />} />
         <Route
           path="successpagefarmer"
           element={<SuccessPage link="/farmer" />}

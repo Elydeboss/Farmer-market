@@ -142,7 +142,7 @@ const BuyerReg: React.FC = () => {
     <div className="bg-light font-dm-sans min-h-screen w-full flex flex-col md:grid md:grid-cols-[1fr_1.4fr] max-w-6xl mx-auto overflow-hidden">
       {/* Left Section */}
       <div
-        className="relative h-60 md:h-auto bg-cover bg-center p-6 text-white"
+        className="relative h-40 md:h-auto bg-cover bg-center p-6 text-white"
         style={{ backgroundImage: `url(${bgImage})` }}
       >
         <img src={logo} alt="FarmMarket Logo" className="w-40 md:w-36 mt-2" />
@@ -163,7 +163,7 @@ const BuyerReg: React.FC = () => {
               <img
                 src={backIcon}
                 alt="Back"
-                className="w-6 absolute -left-8 md:-left-10 top-1 hover:opacity-50"
+                className="w-6 absolute -left-4 md:-left-8top-0 sm:top-1 hover:opacity-50"
               />
             </Link>
             <h2 className="text-green-btn text-xl sm:text-2xl font-bold ml-6">
@@ -172,7 +172,7 @@ const BuyerReg: React.FC = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[16px]">
             {/* Full Name, Phone, Email */}
             {[
               { label: "Full Name", name: "fullName", type: "text", span: 2 },

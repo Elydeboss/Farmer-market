@@ -1,5 +1,4 @@
-import React from "react";
-import BuyerRequestCard from "../components/dashboard-components/StatsCard";
+import BuyerRequestCard from "../../frontend/src/components/BuyerRequestCard";
 import Sidebar from "../components/dashboard-components/Sidebar";
 
 // Dummy data for demonstration
@@ -159,8 +158,12 @@ function request() {
         </div>
       </section>
 
-      {/* Buyer Request Cards Grid */}
-      <BuyerRequestCard />
+      {/* Requests Grid */}
+      <main className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {dummyRequests.map((req) => (
+          <BuyerRequestCard key={req.id} request={req} />
+        ))}
+      </main>
     </div>
   );
 }

@@ -18,7 +18,7 @@ const SignInput = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -74,14 +74,13 @@ const SignInput = () => {
     }
   };
 
-  
   return (
     <div className="mt-8 md:mt-0 flex flex-col h-full">
       {/* Header */}
       <div className="relative mb-8 flex items-center">
         <Link
           to="/"
-          className="absolute -left-8 md:-left-10 hover:opacity-70 transition"
+          className="absolute -left-4 md:-left-8hover:opacity-70 transition"
         >
           <img src={backIcon} className="w-6" alt="Back" />
         </Link>
@@ -134,16 +133,17 @@ const SignInput = () => {
           </div>
 
           {/* Forgot Password*/}
-           <div className="text-right mt-2">
-           <Link to='/forgot'>  <button
-              type="button"
-              className="text-sm text-green-btn font-medium hover:text-green-700 transition-colors duration-200 disabled:opacity-50"
-            >
-              {forgotLoading ? "Sending link..." : "Forgot your password?"}
-            </button>
+          <div className="text-right mt-2">
+            <Link to="/forgot">
+              {" "}
+              <button
+                type="button"
+                className="text-sm text-green-btn font-medium hover:text-green-700 transition-colors duration-200 disabled:opacity-50"
+              >
+                {forgotLoading ? "Sending link..." : "Forgot your password?"}
+              </button>
             </Link>
-          </div> 
-
+          </div>
         </div>
 
         {/* Feedback messages */}

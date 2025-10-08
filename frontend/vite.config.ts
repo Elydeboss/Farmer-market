@@ -13,4 +13,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   base: "./", 
+  build: {
+    outDir: "dist"   // must match Render's "Publish Directory"
+  }
 });

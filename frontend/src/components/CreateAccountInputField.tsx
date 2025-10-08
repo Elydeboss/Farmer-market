@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { api } from "../utils/api";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react"; // for password toggle
 import backIcon from "../assets/arrow-icon.svg";
@@ -128,8 +129,8 @@ function CreateAccountInputField() {
     try {
       setLoading(true);
 
-      await axios.post(
-        "http://localhost:3500/api/users/register/farmer",
+      await api.post(
+        "/api/users/register/farmer",
         { ...formData },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -166,7 +167,7 @@ function CreateAccountInputField() {
           <img
             src={backIcon}
             alt="Back"
-            className="w-6 absolute -left-8 md:-left-10 top-1 hover:opacity-50 transition"
+            className="w-6 absolute -left-4 md:-left-8 top-0 sm:top-1 hover:opacity-50 transition"
           />
         </Link>
         <h1 className="text-green-btn font-bold text-lg sm:text-xl ml-4 md:ml-6">
@@ -175,7 +176,7 @@ function CreateAccountInputField() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-sm">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-[16px]">
         <InputField
           name="firstName"
           label="First Name"

@@ -1,10 +1,9 @@
-
 type Props = {
   title: string;
   value: string | number;
   hint?: React.ReactNode;
   className?: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
 };
 
 const StatsCard = ({ title, value, hint, className = "", icon }: Props) => {

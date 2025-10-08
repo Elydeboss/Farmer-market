@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { api } from "../utils/api";
 import backIcon from "../assets/arrow-icon.svg";
 import bgImage from "../assets/Rectangle 28.png";
 import logo from "../assets/Asset 10.png";
@@ -26,8 +27,8 @@ const ForgotPassword = () => {
       setError(null);
       setMessage(null);
 
-      const res = await axios.post(
-        "http://localhost:3500/api/users/forgot-password",
+      const res = await api.post(
+        "/api/users/forgot-password",
         { email },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -75,7 +76,7 @@ const ForgotPassword = () => {
           <div className="relative mb-8 flex items-center">
             <Link
               to="/signin"
-              className="absolute -left-8 md:-left-10 hover:opacity-70 transition"
+              className="absolute -left-4 md:-left-8hover:opacity-70 transition"
             >
               <img src={backIcon} className="w-6" alt="Back" />
             </Link>
