@@ -1,16 +1,19 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Product from "../models/product.schema";
 import { Types } from "mongoose";
 
 export async function createProduct(req: Request, res: Response) {
   const u = req.user;
   if (!u) return res.status(401).json({ message: "unauthorized" });
-  if (u.role !== "farmer") return res.status(403).json({ message: "farmer only" });
+  if (u.role !== "farmer")
+    return res.status(403).json({ message: "farmer only" });
 
   const { name, price, quantity, category, available } = req.body;
 
   if (!name || price === undefined || quantity === undefined || !category) {
-    return res.status(400).json({ message: "name, price, quantity, category required" });
+    return res
+      .status(400)
+      .json({ message: "name, price, quantity, category required" });
   }
 
   const farmerId = (u as any)._id || u.id; // handle both token shapes
@@ -20,19 +23,30 @@ export async function createProduct(req: Request, res: Response) {
     price,
     quantity,
     category,
-    available: available ?? true
+    available: available ?? true,
   });
 
   return res.status(201).json(doc);
 }
 
 export async function listProducts(req: Request, res: Response) {
-  const { category, minPrice, maxPrice, farmer, available, q, page = "1", limit = "12", sort } = req.query as Record<string, string>;
+  const {
+    category,
+    minPrice,
+    maxPrice,
+    farmer,
+    available,
+    q,
+    page = "1",
+    limit = "12",
+    sort,
+  } = req.query as Record<string, string>;
 
   const filter: any = {};
   if (category) filter.category = category;
   if (farmer) filter.farmer = farmer;
-  if (available === "true" || available === "false") filter.available = available === "true";
+  if (available === "true" || available === "false")
+    filter.available = available === "true";
 
   const minP = minPrice ? Number(minPrice) : undefined;
   const maxP = maxPrice ? Number(maxPrice) : undefined;
@@ -52,21 +66,28 @@ export async function listProducts(req: Request, res: Response) {
     price: { price: 1 },
     "-price": { price: -1 },
     createdAt: { createdAt: 1 },
-    "-createdAt": { createdAt: -1 }
+    "-createdAt": { createdAt: -1 },
   };
   const sortBy = sortMap[sort || "-createdAt"] || { createdAt: -1 };
 
   const [data, total] = await Promise.all([
     Product.find(filter).sort(sortBy).skip(skip).limit(limitNum),
-    Product.countDocuments(filter)
+    Product.countDocuments(filter),
   ]);
 
-  res.json({ data, page: pageNum, limit: limitNum, total, pages: Math.ceil(total / limitNum) });
+  res.json({
+    data,
+    page: pageNum,
+    limit: limitNum,
+    total,
+    pages: Math.ceil(total / limitNum),
+  });
 }
 
 export async function getProduct(req: Request, res: Response) {
   const { id } = req.params;
-  if (!Types.ObjectId.isValid(id)) return res.status(400).json({ message: "bad id" });
+  if (!Types.ObjectId.isValid(id))
+    return res.status(400).json({ message: "bad id" });
   const prod = await Product.findById(id);
   if (!prod) return res.status(404).json({ message: "not found" });
   res.json(prod);
@@ -74,7 +95,8 @@ export async function getProduct(req: Request, res: Response) {
 
 export async function updateProduct(req: Request, res: Response) {
   const { id } = req.params;
-  if (!Types.ObjectId.isValid(id)) return res.status(400).json({ message: "bad id" });
+  if (!Types.ObjectId.isValid(id))
+    return res.status(400).json({ message: "bad id" });
   const prod = await Product.findById(id);
   if (!prod) return res.status(404).json({ message: "not found" });
 
@@ -83,7 +105,8 @@ export async function updateProduct(req: Request, res: Response) {
 
   const isOwner = String(prod.farmer) === String((u as any)._id || u.id);
   const isAdmin = u.role === "admin";
-  if (!isOwner && !isAdmin) return res.status(403).json({ message: "not your product" });
+  if (!isOwner && !isAdmin)
+    return res.status(403).json({ message: "not your product" });
 
   const { name, price, quantity, category, available } = req.body;
   if (name !== undefined) prod.name = name;
@@ -98,7 +121,8 @@ export async function updateProduct(req: Request, res: Response) {
 
 export async function deleteProduct(req: Request, res: Response) {
   const { id } = req.params;
-  if (!Types.ObjectId.isValid(id)) return res.status(400).json({ message: "bad id" });
+  if (!Types.ObjectId.isValid(id))
+    return res.status(400).json({ message: "bad id" });
   const prod = await Product.findById(id);
   if (!prod) return res.status(404).json({ message: "not found" });
 
@@ -107,7 +131,8 @@ export async function deleteProduct(req: Request, res: Response) {
 
   const isOwner = String(prod.farmer) === String((u as any)._id || u.id);
   const isAdmin = u.role === "admin";
-  if (!isOwner && !isAdmin) return res.status(403).json({ message: "not your product" });
+  if (!isOwner && !isAdmin)
+    return res.status(403).json({ message: "not your product" });
 
   await prod.deleteOne();
   res.status(204).send();

@@ -9,7 +9,12 @@
     "build": "tsc",
     "start": "node dist/index.js"
   },
-  "keywords": ["express", "typescript", "backend", "agrolink"],
+  "keywords": [
+    "express",
+    "typescript",
+    "backend",
+    "agrolink"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
@@ -22,13 +27,14 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose": "^5.11.96",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.6.0",
+    "@types/node": "^24.7.0",
     "@types/nodemailer": "^7.0.2",
     "nodemon": "^3.1.10",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",

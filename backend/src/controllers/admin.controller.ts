@@ -1,5 +1,5 @@
 // controllers/admin.controller.ts
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import User from "../models/user.schema";
 
 export const promoteToAdmin = async (req: Request, res: Response) => {

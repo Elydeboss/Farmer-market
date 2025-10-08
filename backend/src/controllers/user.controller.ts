@@ -1,32 +1,47 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
 import User from "../models/user.schema";
 import { sendEmail } from "../config/email";
 
-
 const OTP_TTL_MS = 10 * 60 * 1000;
 
 // Generate a 6-digit OTP
-const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
-
+const generateOtp = () =>
+  Math.floor(100000 + Math.random() * 900000).toString();
 
 const jwtSecret: Secret = process.env.JWT_SECRET || "secret";
 const jwtExpiry: string = process.env.JWT_EXPIRATION || "1d";
 
 export const registerFarmer = async (req: Request, res: Response) => {
   try {
+    const {
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      password,
+      confirmPassword,
+      agreeToTerms,
+    } = req.body;
 
-    const { firstName, lastName, phoneNumber, email, password, confirmPassword, agreeToTerms } = req.body;
-
-    if (!firstName || !lastName || !phoneNumber || !email || !password || !confirmPassword) {
+    if (
+      !firstName ||
+      !lastName ||
+      !phoneNumber ||
+      !email ||
+      !password ||
+      !confirmPassword
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
     if (!agreeToTerms) {
-      return res.status(400).json({ message: "You must agree to the Terms of Use" });
+      return res
+        .status(400)
+        .json({ message: "You must agree to the Terms of Use" });
     }
 
     const existing = await User.findOne({ email });
@@ -41,7 +56,7 @@ export const registerFarmer = async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       role: "farmer",
-      isVerified: true, 
+      isVerified: true,
     });
 
     return res.status(201).json({ message: "Farmer registered successfully" });
@@ -51,10 +66,16 @@ export const registerFarmer = async (req: Request, res: Response) => {
   }
 };
 
-
 export const registerBuyer = async (req: Request, res: Response) => {
   try {
-    const { fullName, phoneNumber, email, password, confirmPassword, agreeToTerms } = req.body;
+    const {
+      fullName,
+      phoneNumber,
+      email,
+      password,
+      confirmPassword,
+      agreeToTerms,
+    } = req.body;
 
     if (!fullName || !phoneNumber || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: "All fields are required" });
@@ -63,7 +84,9 @@ export const registerBuyer = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Passwords do not match" });
     }
     if (!agreeToTerms) {
-      return res.status(400).json({ message: "You must agree to the Terms of Use" });
+      return res
+        .status(400)
+        .json({ message: "You must agree to the Terms of Use" });
     }
 
     const existing = await User.findOne({ email });
@@ -78,7 +101,7 @@ export const registerBuyer = async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       role: "buyer",
-      isVerified: true, 
+      isVerified: true,
     });
 
     return res.status(201).json({ message: "Buyer registered successfully" });
@@ -88,10 +111,16 @@ export const registerBuyer = async (req: Request, res: Response) => {
   }
 };
 
-
 export const registerLogistics = async (req: Request, res: Response) => {
   try {
-    const { name, phoneNumber, email, password, confirmPassword, agreeToTerms } = req.body;
+    const {
+      name,
+      phoneNumber,
+      email,
+      password,
+      confirmPassword,
+      agreeToTerms,
+    } = req.body;
 
     if (!name || !phoneNumber || !email || !password || !confirmPassword) {
       return res.status(400).json({ message: "All fields are required" });
@@ -100,10 +129,12 @@ export const registerLogistics = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Passwords do not match" });
     }
     if (!agreeToTerms) {
-      return res.status(400).json({ message: "You must agree to the Terms of Use" });
+      return res
+        .status(400)
+        .json({ message: "You must agree to the Terms of Use" });
     }
 
-    const existing = await User.findOne({ email }); 
+    const existing = await User.findOne({ email });
     if (existing) {
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -115,10 +146,12 @@ export const registerLogistics = async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       role: "logistics",
-      isVerified: true, 
+      isVerified: true,
     });
 
-    return res.status(201).json({ message: "Logistics registered successfully" });
+    return res
+      .status(201)
+      .json({ message: "Logistics registered successfully" });
   } catch (err) {
     console.error("Register Logistics Error:", err);
     return res.status(500).json({ message: "Internal server error" });
@@ -132,7 +165,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Email and password required" });
     }
 
-    const user = await User.findOne({ email }).select("+password"); 
+    const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -142,11 +175,9 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      jwtSecret,
-      { expiresIn: jwtExpiry } as SignOptions
-    );
+    const token = jwt.sign({ id: user._id, role: user.role }, jwtSecret, {
+      expiresIn: jwtExpiry,
+    } as SignOptions);
 
     return res.json({
       message: "Login successful",
@@ -159,7 +190,6 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
     const { email, otp } = req.body;
@@ -167,7 +197,11 @@ export const verifyEmail = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Email and OTP required" });
     }
 
-    const user = await User.findOne({ email, otp, otpExpires: { $gt: new Date() } }); 
+    const user = await User.findOne({
+      email,
+      otp,
+      otpExpires: { $gt: new Date() },
+    });
     if (!user) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
@@ -184,7 +218,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
   }
 };
 
-
 export const resendOtp = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
@@ -192,7 +225,7 @@ export const resendOtp = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Email required" });
     }
 
-    const user = await User.findOne({ email }); 
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -202,7 +235,11 @@ export const resendOtp = async (req: Request, res: Response) => {
     user.otpExpires = new Date(Date.now() + OTP_TTL_MS);
     await user.save();
 
-    await sendEmail(email, "Your new OTP", `Your OTP is ${otp}. It expires in 10 minutes.`); 
+    await sendEmail(
+      email,
+      "Your new OTP",
+      `Your OTP is ${otp}. It expires in 10 minutes.`
+    );
 
     return res.json({ message: "New OTP sent" });
   } catch (err) {
@@ -210,7 +247,6 @@ export const resendOtp = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
 
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
@@ -229,7 +265,11 @@ export const forgotPassword = async (req: Request, res: Response) => {
     user.otpExpires = new Date(Date.now() + OTP_TTL_MS);
     await user.save();
 
-    await sendEmail(email, "Password Reset OTP", `Your OTP is ${otp}. It expires in 10 minutes.`);
+    await sendEmail(
+      email,
+      "Password Reset OTP",
+      `Your OTP is ${otp}. It expires in 10 minutes.`
+    );
 
     return res.json({ message: "OTP sent to email" });
   } catch (err) {
@@ -248,7 +288,11 @@ export const resetPassword = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    const user = await User.findOne({ email, otp, otpExpires: { $gt: new Date() } }).select("+password"); 
+    const user = await User.findOne({
+      email,
+      otp,
+      otpExpires: { $gt: new Date() },
+    }).select("+password");
     if (!user) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }

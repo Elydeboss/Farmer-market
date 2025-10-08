@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -27,7 +27,9 @@ let authMiddlewareReal:
   | ((req: Request, res: Response, next: NextFunction) => void)
   | undefined;
 let authorizeRolesReal:
-  | ((...roles: Role[]) => (req: Request, res: Response, next: NextFunction) => void)
+  | ((
+      ...roles: Role[]
+    ) => (req: Request, res: Response, next: NextFunction) => void)
   | undefined;
 
 // Load real middleware only if USE_STUB is false
@@ -47,7 +49,9 @@ function authMiddlewareStub(req: Request, res: Response, next: NextFunction) {
   if (!raw) {
     return res
       .status(401)
-      .json({ message: "No x-dev-user header provided, or turn off USE_AUTH_STUB" });
+      .json({
+        message: "No x-dev-user header provided, or turn off USE_AUTH_STUB",
+      });
   }
 
   try {
@@ -63,7 +67,8 @@ function authorizeRolesStub(...roles: Role[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
     if (!user) return res.status(401).json({ message: "Unauthorized" });
-    if (!roles.includes(user.role)) return res.status(403).json({ message: "Forbidden" });
+    if (!roles.includes(user.role))
+      return res.status(403).json({ message: "Forbidden" });
     next();
   };
 }
@@ -71,8 +76,8 @@ function authorizeRolesStub(...roles: Role[]) {
 // ✅ Fix: only export assigned functions safely
 export const authMiddleware = USE_STUB
   ? authMiddlewareStub
-  : (authMiddlewareReal ?? authMiddlewareStub);
+  : authMiddlewareReal ?? authMiddlewareStub;
 
 export const authorizeRoles = USE_STUB
   ? authorizeRolesStub
-  : (authorizeRolesReal ?? authorizeRolesStub);
+  : authorizeRolesReal ?? authorizeRolesStub;
