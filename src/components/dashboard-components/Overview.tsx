@@ -113,11 +113,11 @@ const Overview = () => {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <button className="px-4 py-2 font-medium  flex items-center text-[13px] gap-2 border rounded md border-[#bfbfbf]">
+            <button className="px-2 sm:px-4 py-2 font-medium  flex items-center text-[13px] gap-2 border rounded md border-[#bfbfbf]">
               <RotateCw className="w-4 h-4  inline-block" />
               Refresh
             </button>
-            <button className="px-4 py-2 font-medium flex items-center text-[13px] gap-2 border rounded md border-[#bfbfbf]">
+            <button className="px-2 sm:px-4 py-2 font-medium flex items-center text-[13px] gap-2 border rounded md border-[#bfbfbf]">
               <Filter className="w-4 h-4 mrnline-block" />
               Filter
             </button>
@@ -126,18 +126,18 @@ const Overview = () => {
 
         {/* SELECTION TABS */}
         <div className="flex items-center gap-3 mt-6">
-          <button className="px-4 py-2 font-medium text-[13px] bg-pri text-white flex items-center gap-2 border rounded md border-pri">
+          <button className="px-4 sm:px-4 py-2 font-medium text-[13px] bg-pri text-white flex items-center gap-2 border rounded md border-pri">
             All
           </button>
-          <button className="px-4 py-2 font-medium text-[13px]  flex items-center gap-2 border rounded md  border-[#bfbfbf]">
+          <button className="px-2 sm:px-4 py-2 font-medium text-[13px]  flex items-center gap-2 border rounded md  border-[#bfbfbf]">
             <Clock className="w-4 h-4  inline-block" />
             Pending
           </button>
-          <button className="px-4 py-2 font-medium text-[13px]  flex items-center gap-2 border rounded md border-[#bfbfbf]">
+          <button className="px-2 sm:px-4 py-2 font-medium text-[13px]  flex items-center gap-2 border rounded md border-[#bfbfbf]">
             <BadgeCheck className="w-4 h-4  inline-block" />
             Accepted
           </button>
-          <button className="px-4 py-2 font-medium text-[13px] flex items-center gap-2 border rounded md border-[#bfbfbf]">
+          <button className="px-2 sm:px-4 py-2 font-medium text-[13px] flex items-center gap-2 border rounded md border-[#bfbfbf]">
             <Ban className="w-4 h-4 mrnline-block" />
             Rejected
           </button>

@@ -31,6 +31,8 @@ import OrderTracking from "./pages/OrderTracking";
 import PaymentMethod from "./pages/PaymentMethodPage";
 import BuyerPaymentAcceptance from "./pages/BuyerPaymentAcceptancePage";
 import ForgotPassword from "./pages/Forgotpassword";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 import OtpPage from "./pages/OtpPage";
 
@@ -88,6 +90,8 @@ function App() {
         <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/buyerreg" element={<BuyerReg />} />
         <Route path="/verificationcode" element={<VerificationCode />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route
           path="successpagefarmer"
           element={<SuccessPage link="/farmer" />}
