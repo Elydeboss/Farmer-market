@@ -76,7 +76,7 @@ const ForgotPassword = () => {
           <div className="relative mb-8 flex items-center">
             <Link
               to="/signin"
-              className="absolute -left-8 md:-left-10 hover:opacity-70 transition"
+              className="absolute -left-4 md:-left-8hover:opacity-70 transition"
             >
               <img src={backIcon} className="w-6" alt="Back" />
             </Link>
