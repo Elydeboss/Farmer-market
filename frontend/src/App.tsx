@@ -63,7 +63,7 @@ function App() {
           <Route path="overview" element={<Overview />} />
         </Route>
 
-        <Route path="/admindashboard" element={<Admindashboard />} />
+        {/*<Route path="/admindashboard" element={<Admindashboard />} />*/}
         {/**<Route index element={<UserVerification />} />*/}
         <Route path="/userverification" element={<UserVerification />} />
         <Route path="/dispute" element={<DisputePage />} />

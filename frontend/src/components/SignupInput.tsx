@@ -3,7 +3,7 @@ import bgImage from "../assets/Rectangle 28.png";
 import logo from "../assets/Asset 10.png";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import axios from "axios";
+import { api } from "../utils/api";
 
 const SigninPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -15,18 +15,25 @@ const SigninPage = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await axios.post("https://your-api-endpoint.com/api/login", form);
-      console.log("Login successful:", response.data);
-      // Redirect or store token
-    } catch (error) {
-      console.error("Login failed:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    const response = await api.post(`/api/login`, form);
+
+    console.log("Login successful:", response.data);
+    // e.g., save token or navigate
+    // localStorage.setItem("token", response.data.token);
+  } catch (error: any) {
+    console.error(
+      "Login failed:",
+      error.response?.data?.message || error.message
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="bg-light font-dm-sans min-h-screen w-full flex flex-col md:grid md:grid-cols-[1fr_1.2fr] md:gap-2 max-w-5xl mx-auto">
@@ -120,9 +127,9 @@ const SigninPage = () => {
 
           {/* Signup Link */}
           <p className="text-center text-sm text-gray-600 mt-6">
-            Don’t have an account?{" "}
+            Dont have an account?{" "}
             <Link
-              to="/create-account"
+              to="/createaccount"
               className="text-green-700 font-medium hover:text-green-800 transition-colors"
             >
               Create one
