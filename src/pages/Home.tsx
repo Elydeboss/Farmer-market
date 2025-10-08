@@ -1,4 +1,3 @@
-
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Image1 from "../assets/Home-Images/Home-Img 1.svg";
@@ -29,17 +28,17 @@ const Home = () => {
         <div className="absolute inset-0 bg-black opacity-40"></div>
 
         <div className="relative max-w-2xl z-10 px-5 mx-auto flex flex-col justify-center items-center h-full text-center">
-          <h1 className="text-white font-semibold text-2xl md:text-4xl lg:text-5xl leading-snug">
+          <h1 className="text-white font-bold text-[28px] md:text-4xl lg:text-5xl leading-snug">
             Fresh Food From Farmers
           </h1>
           <p className="text-white text-base md:text-lg mt-5 mb-10">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur
             inventore sit nobis quibusdam.
           </p>
-           <Link to="/marketplace">
-          <button className="bg-sec text-black text-sm font-bold py-3 px-6 rounded-md hover:bg-sec2">
-            Discover More
-          </button>
+          <Link to="/marketplace">
+            <button className="bg-sec text-black text-sm font-bold py-3 px-6 rounded-md hover:bg-sec2">
+              Discover More
+            </button>
           </Link>
         </div>
       </section>
@@ -81,9 +80,9 @@ const Home = () => {
             </ul>
             <div className="mt-6 md:mb-10">
               <Link to="/marketplace">
-              <button className=" bg-black inline-block text-white text-sm font-bold py-3 px-6 rounded-md">
-                Discover More
-              </button>
+                <button className=" bg-black inline-block text-white text-sm font-bold py-3 px-6 rounded-md">
+                  Discover More
+                </button>
               </Link>
             </div>
           </div>
