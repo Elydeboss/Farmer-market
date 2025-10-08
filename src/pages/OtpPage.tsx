@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 
 const OtpPage = () => {
   const location = useLocation();
@@ -25,11 +24,7 @@ const OtpPage = () => {
       return;
     }
 
-   navigate("/buyerdashboard")
-
-    
-
-    
+    navigate("/buyerdashboard");
   };
 
   //  Helper to ensure only numeric input
@@ -66,13 +61,12 @@ const OtpPage = () => {
               {error}
             </div>
           )}
-         
+
           <button
             type="submit"
-           
             className="bg-green-btn text-white font-medium text-sm px-6 py-2.5 rounded-md hover:bg-green-dark transition duration-300 disabled:opacity-60"
           >
-           Send
+            Send
           </button>
         </form>
 

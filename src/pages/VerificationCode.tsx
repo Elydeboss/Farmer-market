@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useFarmerContext } from "../context/FarmerContext";
 
 const VerificationCode = () => {
-  const {phone} = useFarmerContext()
+  const { phone } = useFarmerContext();
   const navigateCancel = useNavigate();
-  const navigateVerify = useNavigate()
+  const navigateVerify = useNavigate();
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const [active, setActive] = useState("verify");
@@ -52,15 +52,9 @@ const VerificationCode = () => {
       setError(null);
       setSuccess(null);
 
-      
-    
-
       setSuccess("");
-    
-       
-        navigateVerify("/successpage");
-  
 
+      navigateVerify("/successpage");
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -98,7 +92,9 @@ const VerificationCode = () => {
             {code.map((digit, index) => (
               <input
                 key={index}
-                ref={(el) => (inputsRef.current[index] = el)}
+                ref={(el) => {
+                  inputsRef.current[index] = el;
+                }}
                 type="text"
                 maxLength={1}
                 value={digit}

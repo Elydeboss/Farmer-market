@@ -1,4 +1,3 @@
-
 // --- TypeScript Interfaces ---
 interface RequestedItem {
   name: string;
@@ -70,3 +69,5 @@ export const BuyerRequestCard: React.FC<BuyerRequestCardProps> = ({
     </div>
   );
 };
+
+export default BuyerRequestCard;

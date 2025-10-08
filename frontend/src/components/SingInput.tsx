@@ -18,8 +18,7 @@ const SignInput = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  
+  const [showPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -51,11 +50,9 @@ const SignInput = () => {
       setError(null);
       setSuccess(null);
 
-      const response = await api.post(
-        "/api/users/login",
-        formData,
-        { headers: { "Content-Type": "application/json" } }
-      );
+      const response = await api.post("/api/users/login", formData, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       const data = response.data;
       localStorage.setItem("token", data.token);
@@ -75,7 +72,6 @@ const SignInput = () => {
     }
   };
 
-  
   return (
     <div className="mt-8 md:mt-0 flex flex-col h-full">
       {/* Header */}
@@ -135,15 +131,15 @@ const SignInput = () => {
           </div>
 
           {/* Forgot Password*/}
-           <div className="text-right mt-2">
-           <Link to='/forgot'>  <button
-              type="button"
-              className="text-sm text-green-btn font-medium hover:text-green-700 transition-colors duration-200 disabled:opacity-50"
-            >
-            </button>
+          <div className="text-right mt-2">
+            <Link to="/forgot">
+              {" "}
+              <button
+                type="button"
+                className="text-sm text-green-btn font-medium hover:text-green-700 transition-colors duration-200 disabled:opacity-50"
+              ></button>
             </Link>
-          </div> 
-
+          </div>
         </div>
 
         {/* Feedback messages */}

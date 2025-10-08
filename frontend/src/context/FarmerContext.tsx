@@ -1,6 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
-
 
 interface FarmerContextType {
   phone: string;
@@ -8,7 +7,6 @@ interface FarmerContextType {
 }
 
 const FarmerContext = createContext<FarmerContextType | undefined>(undefined);
-
 
 export const useFarmerContext = () => {
   const context = useContext(FarmerContext);

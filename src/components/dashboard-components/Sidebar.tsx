@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { Send, Settings, LogOut, CircleQuestionMark } from "lucide-react";
 
